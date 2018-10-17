@@ -1,0 +1,26 @@
+/*--------------------------------------------------------
+|Accounts Page Css
+|________________________________*/
+.d-hidden{
+    display: hidden;
+}
+
+#invalid-cred {
+    display: none;
+}
+.dash-actions{
+    cursor: pointer;
+}
+
+.declaration{
+    font-weight: unset;
+    padding-bottom: 5px;
+}
+
+.even-display{
+    display: none !important;
+}
+/*--------------------------------------------------------
+|
+|
+|________________________________*/

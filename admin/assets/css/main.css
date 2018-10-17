@@ -1,0 +1,10 @@
+.plan-row>td, .def-row>td{
+    cursor: pointer;
+}
+
+.d-none{
+    display: none !important;
+}
+#applicants-title{
+    text-transform:uppercase;
+}
