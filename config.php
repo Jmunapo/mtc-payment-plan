@@ -1,6 +1,6 @@
 <?php
 
-define('MTC_HOME', dirname(dirname(__FILE__)));
-define('LOGIN', MTC_HOME.'/account/login.php');
+define('ROOT', dirname(dirname(__FILE__)));
+define('LOGIN', ROOT.'/account/login.php');
 
 ?>

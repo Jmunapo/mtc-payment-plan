@@ -23,6 +23,7 @@
 <script src="js/admin.js"></script>
 <script src="js/pages/forms/form-validation.js"></script>
 
+<script src="js/main_custom.js"></script>
 
 <!-- Jquery Validation Plugin Css -->
 <script src="plugins/jquery-validation/jquery.validate.js"></script>
@@ -30,7 +31,7 @@
 <!-- JQuery Steps Plugin Js -->
 <script src="plugins/jquery-steps/jquery.steps.js"></script>
 
-    <script src="js/pages/forms/form-wizard.js"></script>
+<script src="js/pages/forms/form-wizard.js"></script>
     
     <!-- Sweet Alert Plugin Js -->
 

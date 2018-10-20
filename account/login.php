@@ -1,10 +1,6 @@
 <?php
-
 include('../config.php');
-
-// print_r(MTC_HOME);
-
-// header('Location: '.MTC_HOME.'/pages/sign-in.html');
+require_once('./sessions.php');
 ?>
 
 
@@ -16,8 +12,8 @@ include('../config.php');
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>MTC | Login</title>
     <!-- Favicon-->
-    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
-
+    <link rel="icon" href="favicon.icon" type="image/x-icon">
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
@@ -35,59 +31,79 @@ include('../config.php');
     <link href="../css/style.css" rel="stylesheet">
     <!-- My Css -->
     <link href="../css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+    <!--
+font awesome
+        -->
+        <link rel="stylesheet" href="../fa/css/font-awesome.css">
+
+    
 
 </head>
+<style>
+        .card{
+            margin-top: 100px;
+            margin-bottom:unset;
+     
+        }
+             .changcolor{
+       background:#1269ad !important;
+    }
+    </style>
 
-<body class="login-page">
-    <div class="login-box">
-        <div class="logo">
-            <a href="javascript:void(0);">MTC</a>
-            <small>Payment Plan</small>
-        </div>
-        <div class="card">
+<body class="login-page"">
+    <div class="login-box mt-5">
+        
+        <div class="card ">
             <div class="body">
             <div class="alert alert-danger d-none" id="invalid-cred">
                 Invalid Credentials
             </div>
-                <form id="sign_in" method="POST">
-                    <div class="msg">Sign in to start your session</div>
+                <form id="sign_in" method="POST" action="./login.php">
+                    <div class="msg">THE JEWEL OF EXCELLENCE:</div>
+                    <div class="logo">
+                        <img src="../images/download.png" width="30%" height="50%" alt="" style="margin-left:33%">
+                    </div>
+                
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <i class="material-icons">person</i>
+                            <i class="fa fa-user fa-2x"></i>
                         </span>
                         <div class="form-line">
                             <input type="text" class="form-control" name="username" placeholder="Reg Number" required autofocus>
                         </div>
                     </div>
+
+                   
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
+                            <i class="fa fa-lock fa-2x"></i>
                         </span>
                         <div class="form-line">
                             <input type="password" class="form-control" name="password" placeholder="Password" required>
                         </div>
                     </div>
+                    <br>
                     <div class="row">
-                        <div class="col-xs-8 p-t-5 d-hidden" >
-                            <input type="checkbox" name="rememberme" id="rememberme" class="filled-in chk-col-pink">
-                            <label for="rememberme">Remember Me</label>
-                        </div>
-                        <div class="col-xs-4">
-                            <button class="btn btn-block bg-pink waves-effect" type="submit">SIGN IN</button>
+                       
+                        <div class="col-xs-12">
+                            <button class="btn btn-block bg-pink waves-effect changcolor" name="sub" type="submit">SIGN IN</button>
                         </div>
                     </div>
+                   
                     <div class="row m-t-15 m-b--20">
                         <div class="col-xs-6 d-hidden">
-                            <a href="sign-up.html">Register Now!</a>
+                            <a href="#"><?php echo  date("H:i:A");?></a>
                         </div>
                         <div class="col-xs-6 align-right">
-                            <a href="javascript:;">Forgot Password?</a>
+                            <a href="#"><?php echo  date("d-M-Y");?></a>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+   
 
     <!-- Jquery Core Js -->
     <script src="../plugins/jquery/jquery.min.js"></script>
@@ -104,47 +120,44 @@ include('../config.php');
     <!-- Custom Js -->
     <script src="../js/admin.js"></script>
     <script src="../js/pages/examples/sign-in.js"></script>
-</body>
 
-</html>
+    <?php 
+    if(isset($_POST['username']) && $_POST['password']){
+    
+        $username = $_POST['username'];
+        $password = md5($_POST['password']);
 
-<?php
-if(isset($_POST['username']) && $_POST['password']){
-    session_start();
-    $username = $_POST['username'];
-    $password = md5($_POST['password']);
+        $db = new DBHelper();
 
-    require_once('../php/hawk/DBHelper.php');
+        $login = $db->getDetailsPass('students_login', 'reg_number', 'password', $username, $password);
+        if (sizeof($login) == 1) {
+            $_SESSION['student'] = $username;
+            $_SESSION['role'] = 'student';
+            ?>
+            <script> window.location.reload()</script>
+            <?php
+            //header('Location: ../indexz.php');
+            exit(0);
+        }
 
-    $db = new DBHelper();
+        $admin = $db->getDetailsPass('admin_login', 'username', 'password', $username, $password);
 
-    $login = $db->getDetailsPass('students_login', 'reg_number', 'password', $username, $password);
-
-    if (sizeof($login) == 1) {
-        $_SESSION['username'] = $username;
-        $_SESSION['role'] = 'student';
-        header('Location: ../index.php');
-        exit();
-    }
-
-    $admin = $db->getDetailsPass('admin_login', 'username', 'password', $username, $password);
-
-    if (sizeof($admin) == 1) {
-        $_SESSION['username'] = $username;
-        $_SESSION['role'] = 'admin';
-        header('Location: ../admin/index.php');
-        exit();
-    }
+        if (sizeof($admin) == 1) {
+            $_SESSION['admin'] = $username;
+            $_SESSION['role'] = 'admin';
+            ?>
+            <script> window.location.reload()</script>
+            <?php
+            exit(0);
+        }
 
     ?>
-
-        <script>
-            $('#invalid-cred').show();
-        </script>
+        <script> $('#invalid-cred').show();</script>
     <?php
+    }
+?>
+</body>
+</html>
 
 
-
-    var_dump($login);
-
-}
+ 

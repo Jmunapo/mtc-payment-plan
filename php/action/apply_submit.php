@@ -74,7 +74,7 @@ function checkAmountEmpty($field){
     if(isset($_POST[$field])){
         return htmlentities($_POST[$field]);
     }
-    return 0;
+    return -1;
 }
 
 function checkDateEmpty($field){

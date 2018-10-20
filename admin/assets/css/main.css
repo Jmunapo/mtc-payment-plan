@@ -8,3 +8,39 @@
 #applicants-title{
     text-transform:uppercase;
 }
+.top
+{
+    background:#1269ad;
+    padding-left:21%;
+}
+
+.changcolor{
+    background:#1269ad !important;
+}
+.pan{
+    cursor: pointer;
+}
+.changcolor2{
+    color:#1269ad !important;
+}
+.changcolor3{
+    background:#1268a8 !important;
+  
+    border-radius:0px !important;
+   
+    
+}
+
+.hover-expand-effect{
+    cursor: pointer;
+}
+.bg1{
+ 
+    color:rgb(22, 10, 92);
+  
+   border-radius: 0px;
+  
+  
+}
+
+

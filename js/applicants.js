@@ -1,6 +1,5 @@
 $('.plan-row').click($event=>{
     var regNumber = $($event.target.parentNode)[0].children[0].innerText;
-    console.log(regNumber);
     window.location = `view-plan.php?reg=${regNumber}`;
 })
 

@@ -4,9 +4,9 @@
 session_start();
 require_once("php/hawk/DBHelper.php");
 
-if(isset($_SESSION['username'])){
+if(isset($_SESSION['student'])){
     $db=new DBHelper();
-        $username=$_SESSION['username'];
+        $username=$_SESSION['student'];
 
         $data=$db->getDetails('students_login','reg_number', $username);
         $data1=$db->getDetails('accounts','reg_number', $username);

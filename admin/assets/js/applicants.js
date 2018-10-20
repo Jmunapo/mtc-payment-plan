@@ -4,12 +4,7 @@ $('.def-row').click($event=>{
 })
 
 $('.plan-row').click($event=>{
-    let trgt = $event.currentTarget;
     var regNumber = $($event.target.parentNode)[0].children[0].innerText;
-    if($(trgt).hasClass('approved')){
-        window.location = `defaulters.php?reg=${regNumber}`;
-        return;
-    }
     window.location = `view-plan.php?reg=${regNumber}`;
 })
 
@@ -35,4 +30,15 @@ function switchTable(table){
         $(`#${table}`).animateCss('fadeInDown');
         curr = table;
     },500)
+}
+var currnt = 'all';
+
+function switchTo(group){
+    //$('')
+    
+    if(group === currnt ){
+        return;
+    }
+     $('#sendto').html(`${group} plans`);
+ 
 }
