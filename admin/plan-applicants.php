@@ -532,10 +532,6 @@ if(isset($_SESSION['admin'])){
                                                 <td><?php echo $place;?></td>
                                                 <td><?php echo $info[$i]['plan_span'];?></td>
                                                 <td>$<?php echo $data5[0]['totalfeesacrued']-$data5[0]['totalpayments'];?>-00</td>
-                                            
-                                            
-                                                
-                                            
                                                 </tr>
                                                 
                                             <?php    
