@@ -51,7 +51,7 @@ font awesome
     }
     </style>
 
-<body class="login-page"">
+<body class="login-page">
     <div class="login-box mt-5">
         
         <div class="card ">
