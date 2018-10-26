@@ -129,118 +129,96 @@ font awesome
     <script src="../js/admin.js"></script>
     <script src="../js/pages/examples/sign-in.js"></script>
 
-    <?php 
+    <?php
+    
+    function updateData($name, $planAmnt, $reg_number, $fin = false){
+        $reg = ['reg_number' => $reg_number ];
+
+        $fields = [ $name => $planAmnt ];
+
+        $db = new Optimizer();
+		
+        $check = $db->updateExactData('applicants', $reg, $fields);
+        if($check){
+            if($fin && $planAmnt == 0){
+                $status = [ "status" => "settled"];
+                $db->updateExactData('applicants', $reg, $status);
+            }
+        }else{
+            echo "Error <br />"; 
+        }
+        
+    }
     if(isset($_POST['username']) && $_POST['amount']){
 
         $date=date("Y-m-d");
         $reg_number = $_POST['username'];
         $amount = $_POST['amount'];
-
-       
-
+        
         $db = new DBHelper();
+        
         $valid_reg=$db->getDetails('personal','reg_number',$reg_number);
         if (sizeof($valid_reg) == 1) {
-        $pay= array('payments',
-        $date,
-        $reg_number,
-        $amount,
-    );
-       
-
-    $entered = $db->insertData($pay);
-    
-    if($entered){
-        //run updates to plans if exits
-        /*
-        $plan=$db->getDetails('applicants','reg_number',$reg_number);
-        if(sizeof($plan) && $plan[0]['status'] != "settled"){
-
-
-           $amtF=  $plan[0]['amountFirst'];
-           $amtS=  $plan[0]['amountSecond'];
-           $amtT=  $plan[0]['amountThird'];
-           $amtFT=  $plan[0]['amountFourth'];
-
-           $data=  array( $amtF, $amtS, $amtT, $amtFT);
-             
-           while( $amount>0){
-               if($amtF>$amount){
-                $amtF-=$amount;
-                echo $amtF;
-               }
-               
-           }
-
-
-        }
-        */
-        ?>
-        {
-           
-            <script> $('#submited').show();</script>
-            <script>setTimeout(()=>{
-        window.location="payment.php"
-    },3000) </script>
-            <?php
-                exit(0);
-                ?>
-        }
+            $pay= array('payments', $date, $reg_number, $amount);
         
-        <?php
-    }else if(!$entered){
-            ?>
-            {
+            $entered = $db->insertData($pay);
+        
+            if($entered){
+                $plan = $db->getDetails('applicants','reg_number',$reg_number);
+                if(sizeof($plan) == 1 && $plan[0]['status'] != "settled"){
+                    $planArr = array('amountFirst', 
+                                    'amountSecond', 
+                                    'amountThird', 
+                                    'amountFourth');
+                    $planIndex = $plan[0];
+
+                    foreach ($planArr as $key => $name) {
+                        $planAmnt = $planIndex[$name];
+                        if($planAmnt - $amount <= 0){
+                            $amount -= $planAmnt;
+                            updateData($name, "00", $reg_number);
+                        }else {
+                           $planAmnt -= $amount; 
+                           updateData($name, $planAmnt, $reg_number, true);
+                           break;
+                        }
+                    }
+                }
+                ?>
+            <script> $('#submited').show();</script>
+            <!-- <script>setTimeout(()=>{window.location="payment.php"},3000) </script> -->
+
+            <?php }else if(!$entered){   ?>
+
                 <script> $('#logo').addClass('d-none');</script>
                 <script> $('#invalid').show();</script>
-                <script>setTimeout(()=>{
-        window.location="payment.php"
-    },3000) </script>
+                <script>setTimeout(()=>{window.location="payment.php" },3000) </script>
             <?php
-                exit(0);
-                ?>
             }
-        <?php
-    }
-  
-    }
-    else{
-        ?>
-        {
+        
+        } else{  ?>
             <script> $('#logo').addClass('d-none');</script>
             <script> $('#invalid').show();</script>
-            <script>setTimeout(()=>{
-        window.location="payment.php"
-    },3000) </script>
-            <?php
-                exit(0);
-                ?>
-        }
-    <?php   
-    }
-}
-?>
+            <script>setTimeout(()=>{ window.location="payment.php" },3000) </script>
+        <?php }
+    } ?>
+
 <script>
-
-function validate(){
- y = reg.value;
- 
-
- $.post("./search.php", {"reg": y}, (result)=>{
-     
-     let user = JSON.parse(result);
-     $('#check').show();
-     $("#check").html(` 
-                            <i class="fa fa-info-circle fa-2x"></i>
-                          ${user.name} &nbsp; ${user.surname}`);
-     
-
-     
- });
-}
-
-
+    function validate(){
+    let regNumber = reg.value;
+    
+    $.post("./search.php", {"reg": regNumber}, (result)=>{
+        let user = JSON.parse(result);
+        $('#check').show();
+        if("name" in user){
+            $("#check").html(`<i class="fa fa-info-circle fa-2x"></i>${user.name} &nbsp; ${user.surname}`);
+        }else{
+            $("#check").html(`<i class="fa fa-info-circle fa-2x"></i>Student not found!`); 
+        }
+    });
+    }
 </script>
+
 </body>
 </html>
 
