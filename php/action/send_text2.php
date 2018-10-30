@@ -47,7 +47,7 @@ if(isset($_POST['phone_number']))
     $destinations = $phone;
 
     // SMS Message to send
-	$message = "Great !! ,Your $span month/s payment plan has been approved,You can register now.Enjoy your studies and Comply to your plan ";
+	$message = "You defaulted your plan ,please make a payment to avoid being defered from your studies";
 
     // send via BulkSMS HTTP API
 

@@ -395,11 +395,11 @@ if(isset($_SESSION['admin'])){
                                 </div>
                                 <div class="col-xs-12 ">
                                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                        <button class="btn btn-primary waves-effect col-xs-12 col-md-12 changcolor" data-type="prompt">CUSTOM NOTIFICATION</button>
+                                        <button class="btn btn-primary waves-effect col-xs-12 col-md-12 changcolor" data-type="prompt2">CUSTOM NOTIFICATION</button>
                                     </div>
                                
                                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                    <button class="btn btn-primary waves-effect col-xs-12 col-md-12 changcolor" data-type="ajax-loader">AUTOMATIC NOTIFICATION</button>
+                                    <button class="btn btn-primary waves-effect col-xs-12 col-md-12 changcolor" data-type="with-custom-icon">AUTOMATIC NOTIFICATION</button>
                                     </div>
                                 </div>
                                 </div>

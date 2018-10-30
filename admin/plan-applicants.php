@@ -4,14 +4,18 @@ require_once("../account/sessions.php");
 if(isset($_SESSION['admin'])){
     $unapproved = " ";
     $approved = "approved";
+    $settled  ="settled";
+  
+   
+  
 
     $data = $dbHelper->getDetails('admin_login','username', $username);
     $unapprovedApplic = $dbHelper->getDetails('applicants','status', " ");
+    $settledplans = $dbHelper->getDetails('applicants','status', $settled);
     $info = $dbHelper->getDetails('applicants','status', $approved);
-
     $allApplicants = $dbHelper->getAllValues('applicants');
 
-    $defaulters = array_filter($unapprovedApplic, function ($d){
+    $defaulters = array_filter($info, function ($d){
         $nowDate = new DateTime("yesterday");
         $tomorrowDate = new DateTime("tomorrow");
         $dFst = $tomorrowDate;
@@ -19,26 +23,75 @@ if(isset($_SESSION['admin'])){
         $dTrd = $tomorrowDate;
         $dFth = $tomorrowDate;
 
-        if($d['dateFirst'] != '0000-00-00'){
+        if($d['dateFirst'] != '0000-00-00' && $d['amountFirst'] != 0 ){
             $dFst = new DateTime($d['dateFirst']);
 
         }
-        if($d['dateSecond'] != '0000-00-00'){
+        if($d['dateSecond'] != '0000-00-00' && $d['amountSecond'] != 0 ){
             $dSec = new DateTime($d['dateSecond']);
         }
-        if($d['dateThird'] != '0000-00-00'){
+        if($d['dateThird'] != '0000-00-00' && $d['amountThird'] != 0 ){
             $dTrd = new DateTime($d['dateThird']);
         }
-        if($d['dateFourth'] != '0000-00-00'){
+        if($d['dateFourth'] != '0000-00-00' && $d['amountFourth'] != 0){
             $dFth = new DateTime($d['dateFourth']);
         }
         
         if($nowDate >= $dFst || $nowDate >= $dSec  || $nowDate >= $dTrd  || $nowDate >= $dFth ){
+            
             return true;
         }else {
             return false;
         }
+
+
     });
+
+    $activeplans= array_filter($allApplicants, function($a){
+        $nowDate = new DateTime("yesterday");
+        $tomorrowDate = new DateTime("tomorrow");
+        $dFst = $tomorrowDate;
+        $dSec = $tomorrowDate;
+        $dTrd = $tomorrowDate;
+        $dFth = $tomorrowDate;
+
+        if($a['dateFirst'] != '0000-00-00' && $a['amountFirst'] != 0 ){
+            $dFst = new DateTime($a['dateFirst']);
+
+        }
+        if($a['dateSecond'] != '0000-00-00' && $a['amountSecond'] != 0 ){
+            $dSec = new DateTime($a['dateSecond']);
+        }
+        if($a['dateThird'] != '0000-00-00' && $a['amountThird'] != 0 ){
+            $dTrd = new DateTime($a['dateThird']);
+        }
+        if($a['dateFourth'] != '0000-00-00' && $a['amountFourth'] != 0){
+            $dFth = new DateTime($a['dateFourth']);
+        }
+        
+        if($nowDate >= $dFst || $nowDate >= $dSec  || $nowDate >= $dTrd  || $nowDate >= $dFth ){
+            
+            return false;
+        }else {
+            return true;
+        }
+    });
+    $activeplans2= array_filter($activeplans, function($b){
+       
+
+       
+        
+        if($b['status']=="settled" || $b['status']=="")  {
+            
+            return false;
+        }
+
+        else {
+            return true;
+        }
+    });
+
+       
       
 }
 ?>
@@ -127,8 +180,14 @@ if(isset($_SESSION['admin'])){
                     <!-- Notifications -->
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                            <i class="material-icons">notifications</i>
+                            <i class="fa fa-bell "></i>
                             <span class="label-count"><?php echo count($unapprovedApplic);?></span>
+                        </a>
+                                            </li>
+                                            <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <i class="fa fa-bell "></i>
+                            <span class="label-count" style="background:red"><?php echo count($unapprovedApplic);?></span>
                         </a>
                                             </li>
                    
@@ -421,7 +480,7 @@ if(isset($_SESSION['admin'])){
                                             <th>Intake</th>
                                             <th>Resident</th>
                                             <th>Span</th>
-                                            <th>Balance</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -432,7 +491,7 @@ if(isset($_SESSION['admin'])){
                                             <th>Intake</th>
                                             <th>Resident</th>
                                             <th>Span</th>
-                                            <th>Balance</th>
+                                            
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -463,7 +522,7 @@ if(isset($_SESSION['admin'])){
                                             <td><?php echo $data4[0]['intake'];?></td>
                                             <td><?php echo $place;?></td>
                                             <td><?php echo $info[$i]['plan_span'];?></td>
-                                            <td>$<?php echo $data5[0]['totalfeesacrued']-$data5[0]['totalpayments'];?>-00</td>
+                                            
                                          
                                           
                                             
@@ -487,9 +546,9 @@ if(isset($_SESSION['admin'])){
                                                 <th>Full Name</th>
                                                 <th>Programme</th>
                                                 <th>Intake</th>
-                                                <th>Resident</th>
-                                                <th>Span</th>
-                                                <th>Plan Balance</th>
+                                                <th>span</th>
+                                                
+                                                <th>status</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -498,50 +557,68 @@ if(isset($_SESSION['admin'])){
                                                 <th>Full Name</th>
                                                 <th>Programme</th>
                                                 <th>Intake</th>
-                                                <th>Resident</th>
-                                                <th>Span</th>
-                                                <th>Plan Balance</th>
+                                                <th>span</th>
+                                               
+                                                <th>status</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         <?php
-                                            $in=count($info);
-                                        
-                                            for($i=0; $i<$in ;$i++ ){
+                                foreach ($activeplans2 as $active => $value)
+                                {
+                                    $reg = $value['reg_number'];
+                                    $personal = $dbHelper->getDetails('personal','reg_number', $reg);
+                                    $userInfo = $dbHelper->getDetails('applicants','reg_number', $reg);
+                                    $eduDetails = $dbHelper->getDetails('education','reg_number', $reg);
+                                    $accountDetails = $dbHelper->getDetails('accounts','reg_number', $reg);
+                                    $status=$userInfo[0]['status'] ;
+                                    $statusValue=" ";
+                                    if($status =="approved"){
 
-                                            $name=$info[$i]['reg_number'];
-                                            $data3=$dbHelper->getDetails('personal','reg_number', $name);
-                                            $data4=$dbHelper->getDetails('education','reg_number', $name);
-                                            $data5=$dbHelper->getDetails('accounts','reg_number', $name);
-                                            $res=$data4[0]['resident'];
-                                            $place="";
-                                            if($res==1){
-                                                $place="Yes";
-                                            }
-                                            else{
-                                                $place="No";
-                                            }
-                                                ?>
-                                                <tr class='plan-row'>
+                                        $statusValue = "0";
+                                    }
+                                    else{
+                                        $statusValue=$status;
+                                    }    
+                                    
+                                    ?>
+
+                                    <tr class='def-row'>
                                                 
-                                                <td><?php echo $name;?></td>
-                                                <td><?php echo $data3[0]['surname'];?>&nbsp;<?php echo $data3[0]['name'];?></td>
-                                            
-                                                <td><?php echo $data4[0]['program'];?></td>
-                                                <td><?php echo $data4[0]['intake'];?></td>
-                                                <td><?php echo $place;?></td>
-                                                <td><?php echo $info[$i]['plan_span'];?></td>
-                                                <td>$<?php echo $data5[0]['totalfeesacrued']-$data5[0]['totalpayments'];?>-00</td>
-                                                </tr>
-                                                
-                                            <?php    
-                                            
+                                        <td><?php echo $reg;?></td>
+                                        <td><?php echo $personal[0]['surname'];?> <?php echo $personal[0]['name'];?></td>
+                                    
+                                        <td><?php echo $eduDetails[0]['program'];?></td>
+                                        <td><?php echo $eduDetails[0]['intake'];?></td>
+                                        <td><?php echo $value['plan_span'];?></td>
+                                        <?php
+                                        if($statusValue >=0 &&  $statusValue < 10){
+                                            ?>
+                                            <td style="background:red;color:white"><?php echo $statusValue;?> %</td>
+                                            <?php
                                         }
-                                        ?>
-
-                                        </tbody>
-                                    </table>
-                                    </div>
+                                        
+                                        elseif($statusValue >10 &&  $statusValue < 50){
+                                            ?>
+                                             <td style="background:#1269ad;color:white"><?php echo $statusValue;?> %</td>
+                                             <?php
+                                        }
+                                        else{
+                                            ?>
+                                             <td style="background:green;color:white"><?php echo $statusValue;?> %</td>
+                                             <?php
+                                        }
+                                       ?>
+                                    
+                                       
+                                    </tr>
+                                <?php
+                                #end foreach
+                                }
+                                ?>
+                                </tbody>
+                            </table>
+                            </div>
                         
                             <div id="all" class="table-responsive d-none">
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable">
@@ -690,7 +767,7 @@ if(isset($_SESSION['admin'])){
                                         </tfoot>
                                         <tbody>
                                         <?php
-                                            $in=count($info);
+                                            $in=count($settledplans);
                                         
                                             for($i=0; $i<$in ;$i++ ){
 

@@ -340,7 +340,7 @@ class DBHelper
     public
     function deleteData($table_name, $where_column, $where_value)
     {
-        $sql = "DELETE FROM $table_name WHERE $where_column = $where_value";
+        $sql = "DELETE  FROM $table_name WHERE $where_column = $where_value";
         $deleted = mysqli_query($this->connectToServer(), $sql);
         return $deleted;
 

@@ -33,7 +33,7 @@
                     var res = JSON.parse(response);
                     $('#installs').html('');
                     $('#even').addClass('even-display');
-                    $('.page-loader-wrapper').fadeOut('slow');
+                    $('.page-loader-wrapper').fadeOut('fast');
                     if(res.status === "success"){
                         e.target.reset();
                         swal('',`Successfully applied, please wait for approval, you will receive alert SMSs on ${res.phone}`, 'success');

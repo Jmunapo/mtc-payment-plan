@@ -1,9 +1,24 @@
 <?php
-
+session_start();
+require_once("../hawk/DBHelper.php");
+    $db=new DBHelper();
+ $username =$_SESSION['admin'] ;
+ $admin    =$db->getDetails('admin_login','username',$username);
+ $post     =$admin[0]['post'];
 
 if(isset($_POST['inputValue']))
 {
-	$phone=$_POST['phone_number'];
+   
+    $phone=$_POST['phone_number'];
+    
+  
+    $phone      =$_POST['phone_number'];
+    $person     =$db->getDetails('personal','phone',$phone);
+    $reg_number =$person[0]['reg_number'];
+    $plan       =$db->getDetails('applicants','reg_number',$reg_number);
+    $span       =$plan[0]['plan_span'];
+  
+	/*
 	/*
 	$data=$db->getDetails('personal','phone', $username);
 	$reg_number=$data[0]['username'];
@@ -44,7 +59,19 @@ if(isset($_POST['inputValue']))
 
 
     //run sql queries here
+    $date           =date("Y-m-d");
+     $notice= array('notices',
+        $date,
+        $reg_number,
+        $post,
+        $message
+       
+      
+    );
 
+    $entered = $db->insertData($notice);
+    $delete  =$db->deleteData('applicants','reg_number',$reg_number);
+  
 }
 
     ?>

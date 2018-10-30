@@ -131,7 +131,7 @@ font awesome
 
     <?php
     
-    function updateData($name, $planAmnt, $reg_number, $fin = false){
+    function updateData($name, $planAmnt, $reg_number){
         $reg = ['reg_number' => $reg_number ];
 
         $fields = [ $name => $planAmnt ];
@@ -139,14 +139,15 @@ font awesome
         $db = new Optimizer();
 		
         $check = $db->updateExactData('applicants', $reg, $fields);
-        if($check){
-            if($fin && $planAmnt == 0){
-                $status = [ "status" => "settled"];
-                $db->updateExactData('applicants', $reg, $status);
-            }
-        }else{
-            echo "Error <br />"; 
-        }
+        
+    
+         
+        //  if($pay>=$totalamounts){
+                
+           //   $status = [ "status" => "settled"];
+               // $db->updateExactData('applicants', $reg, $status);
+         // }
+        
         
     }
     if(isset($_POST['username']) && $_POST['amount']){
@@ -162,6 +163,11 @@ font awesome
             $pay= array('payments', $date, $reg_number, $amount);
         
             $entered = $db->insertData($pay);
+            $accounts=$db->getDetails('accounts','reg_number',$reg_number);
+            $totalpaid=$accounts[0]['totalpayments'];
+            $totalpaid+=$amount;
+            $db->updateData('accounts','totalpayments', $totalpaid, 'reg_number', $reg_number);
+            
         
             if($entered){
                 $plan = $db->getDetails('applicants','reg_number',$reg_number);
@@ -184,9 +190,85 @@ font awesome
                         }
                     }
                 }
+
+                //try  setteled or not
+                
+              $updatestatus  = $db->getDetails('applicants','reg_number',$reg_number);
+                $fstdate     = $updatestatus[0]['dateFirst'];
+                $scnddate    = $updatestatus[0]['dateSecond'];
+                $thrddate    = $updatestatus[0]['dateThird'];
+                $forthdate   = $updatestatus[0]['dateFourth'];
+
+                //amounts
+                $amtfst     = $updatestatus[0]['amountFirst'];
+                $amtsnd    = $updatestatus[0]['amountSecond'];
+                $amtthd    = $updatestatus[0]['amountThird'];
+                $amtfth  = $updatestatus[0]['amountFourth'];
+                $amounts   =array($amtfst,$amtsnd,$amtthd,$amtfth );
+                $totalamounts =   array_sum($amounts);
+                
+                
+                if ($scnddate == "0000-00-00" ){
+
+                         $date  = $fstdate ;
+                       
+                }
+                
+                elseif ($thrddate == "0000-00-00" ){
+
+                    $date = $scnddate;
+                   
+               } elseif ($forthdate == "0000-00-00" ){
+
+                     $date  = $thrddate;
+                   
+               }else{
+
+                $date  = $forthdate;
+               
+                }
+               
+                $payments= $db->getDetails('payments','reg_number',$reg_number);
+                //print_r($payments);
+                function filter_function($payment){
+                    global $date;
+                  
+                     $appliDate = "2018-01-18";
+                     
+                     return $appliDate <= $payment['date'] && $payment['date'] <= $date;
+                 }
+                echo "<br />"; 
+                $totalpayments = array_filter($payments, 'filter_function');
+                  $paymentnumber=count($totalpayments);
+               // coming up with the sum
+                 $pay=0;
+                for ($i =0 ;$i<$paymentnumber;$i++){
+                $pay += ($totalpayments[$i]['amount']);
+                
+                }
+
+               
+                $total= $db->getDetails('applicants','reg_number',$reg_number);
+             
+                $planTotal=$total[0]['total'];
+                if($pay>=$planTotal){
+                   
+                
+                    $db->updateData('applicants','status', 'setteld', 'reg_number', $reg_number);
+                    
+                    
+                }
+                else{
+                    
+                   
+                    $status= ($pay/$planTotal)*100;
+                    $db->updateData('applicants','status', $status, 'reg_number', $reg_number);
+                    echo $status;
+                }
+
                 ?>
             <script> $('#submited').show();</script>
-            <!-- <script>setTimeout(()=>{window.location="payment.php"},3000) </script> -->
+            <script>setTimeout(()=>{window.location="payment.php"},2000) </script>
 
             <?php }else if(!$entered){   ?>
 
@@ -216,6 +298,7 @@ font awesome
             $("#check").html(`<i class="fa fa-info-circle fa-2x"></i>Student not found!`); 
         }
     });
+ 
     }
 </script>
 
