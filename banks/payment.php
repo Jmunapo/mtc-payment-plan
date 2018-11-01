@@ -229,11 +229,13 @@ font awesome
                 }
                
                 $payments= $db->getDetails('payments','reg_number',$reg_number);
+                $appDate= $db->getDetails('applicants','reg_number',$reg_number);
                 //print_r($payments);
                 function filter_function($payment){
                     global $date;
+
                   
-                     $appliDate = "2018-01-18";
+                     $appliDate = $appDate[0]['date'];
                      
                      return $appliDate <= $payment['date'] && $payment['date'] <= $date;
                  }
@@ -254,7 +256,7 @@ font awesome
                 if($pay>=$planTotal){
                    
                 
-                    $db->updateData('applicants','status', 'setteld', 'reg_number', $reg_number);
+                    $db->updateData('applicants','status', 'settled', 'reg_number', $reg_number);
                     
                     
                 }

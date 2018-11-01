@@ -11,7 +11,6 @@ $('.plan-row').click($event=>{
 var curr = 'unapproved';
 
 function switchTable(table){
-    //$('')
     if(table === "defaulters"){
         $(`#notify`).removeClass('d-none');
     }else{
@@ -34,8 +33,6 @@ function switchTable(table){
 var currnt = 'all';
 
 function switchTo(group){
-    //$('')
-    
     if(group === currnt ){
         return;
     }

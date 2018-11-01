@@ -384,7 +384,7 @@ if(isset($_SESSION['admin'])){
                                  ?>
                                  <div class="col-xs-12 ">
                                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-12">
-                                        <button class="btn btn-primary waves-effect col-md-12 changcolor" data-type="prompt" style="background-color:#1269ad">SEND A NOTIFICATION</button>
+                                        <button class="btn btn-primary waves-effect col-md-12 changcolor" data-type="prompt2=" style="background-color:#1269ad">SEND A NOTIFICATION</button>
                                     </div> 
                                     <?php
                                 }

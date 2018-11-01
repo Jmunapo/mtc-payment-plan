@@ -15,7 +15,7 @@ if(isset($_SESSION['admin'])){
     $info = $dbHelper->getDetails('applicants','status', $approved);
     $allApplicants = $dbHelper->getAllValues('applicants');
 
-    $defaulters = array_filter($info, function ($d){
+    $defaulters = array_filter($allApplicants, function ($d){
         $nowDate = new DateTime("yesterday");
         $tomorrowDate = new DateTime("tomorrow");
         $dFst = $tomorrowDate;
@@ -73,28 +73,95 @@ if(isset($_SESSION['admin'])){
             
             return false;
         }else {
-            return true;
-        }
-    });
-    $activeplans2= array_filter($activeplans, function($b){
-       
-
-       
-        
-        if($b['status']=="settled" || $b['status']=="")  {
+            if($a['status']=="settled" || $a['status']=="")  {
             
-            return false;
-        }
-
-        else {
-            return true;
+                return false;
+            }else {
+                return true;
+            }
         }
     });
 
-       
-      
+    function testRange($DbDate){
+        $fiveDaysToGo = date_modify(new DateTime("today"), '+5 day');
+        $nowDate = new DateTime("today");
+        return ($nowDate <= $DbDate && $DbDate <= $fiveDaysToGo );
+    }
+
+    $dueinfivedays= array_filter($activeplans, function($a){
+        $yesterdayDate = new DateTime("yesterday");
+        
+        $dFst = $dSec = $dTrd = $dFth = $yesterdayDate;
+
+        
+
+        if($a['dateFirst'] != '0000-00-00' && $a['amountFirst'] != 0 ){
+            $dFst = new DateTime($a['dateFirst']);
+
+        }
+        if($a['dateSecond'] != '0000-00-00' && $a['amountSecond'] != 0 ){
+            $dSec = new DateTime($a['dateSecond']);
+        }
+        if($a['dateThird'] != '0000-00-00' && $a['amountThird'] != 0 ){
+            $dTrd = new DateTime($a['dateThird']);
+        }
+        if($a['dateFourth'] != '0000-00-00' && $a['amountFourth'] != 0){
+            $dFth = new DateTime($a['dateFourth']);
+        }
+
+        if(testRange($dFst) || testRange($dSec) || testRange($dTrd) || testRange($dFth)){
+            return true;
+        }
+
+        return false;
+
+    });
+    
+    $numOfFiveDaysToPay = count($dueinfivedays);
+
+
+//five days 
+function testRange2($DbDate){
+    $fiveDaysToGo = date_modify(new DateTime("today"), '-5 day');
+    $nowDate = new DateTime("today");
+    $numberofDays=$nowDate->diff($DbDate);
+    return ( $fiveDaysToGo<= $DbDate && $DbDate <=$nowDate  );
 }
+
+$dueinfivedaysago= array_filter($defaulters, function($a){
+    $tomorrowDate = new DateTime("tomorrow");
+    
+    $dFst = $dSec = $dTrd = $dFth = $tomorrowDate;
+
+    
+
+    if($a['dateFirst'] != '0000-00-00' && $a['amountFirst'] != 0 ){
+        $dFst = new DateTime($a['dateFirst']);
+
+    }
+    if($a['dateSecond'] != '0000-00-00' && $a['amountSecond'] != 0 ){
+        $dSec = new DateTime($a['dateSecond']);
+    }
+    if($a['dateThird'] != '0000-00-00' && $a['amountThird'] != 0 ){
+        $dTrd = new DateTime($a['dateThird']);
+    }
+    if($a['dateFourth'] != '0000-00-00' && $a['amountFourth'] != 0){
+        $dFth = new DateTime($a['dateFourth']);
+    }
+
+    if(testRange2($dFst) || testRange2($dSec) || testRange2($dTrd) || testRange2($dFth)){
+        return true;
+    }
+
+    return false;
+
+});
+
+$numOfFiveDaysago = count($dueinfivedaysago);
+}
+
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -178,18 +245,56 @@ if(isset($_SESSION['admin'])){
                     <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
                     <!-- #END# Call Search -->
                     <!-- Notifications -->
+
+
+
+
+
+
+ 
                     <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                            <i class="fa fa-bell "></i>
-                            <span class="label-count"><?php echo count($unapprovedApplic);?></span>
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                            <i class="fa fa-bell"></i>
+                            <span class="label-count menu1action" id="menu1action"><?php echo count($unapprovedApplic);?></span>
                         </a>
-                                            </li>
-                                            <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                            <i class="fa fa-bell "></i>
-                            <span class="label-count" style="background:red"><?php echo count($unapprovedApplic);?></span>
+                        <ul class="dropdown-menu menu1">
+                            <li class="header">APPLICANTS NOTIFICATIONS</li>
+                            <li class="body">
+                            <li >
+                            <a onclick="switchTable('fivedaysto')" data-target="#navbar-collapse" ><i class="fa fa-flag text-primary"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysToPay;?>&nbsp;&nbsp;Plan/s due within 5 days</li>  </a>
+                            <li role="separator" class="divider"></li>
+                            <li ><a href="javascript:void(0);"><i class="fa fa-flag  text-danger"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysago;?> Plan/s overdue by five days</li> </a>
+                            <li role="separator" class="divider"></li>
+                            <li ><a href="javascript:void(0);"><i class="fa fa-bar-chart text-success"></i>&nbsp;&nbsp;Important Analysis graph</li></a>
+                            <li role="separator" class="divider"></li>
+                            <li style="background:#1269ad;color:white" ><a href="javascript:void(0);"></li></a>
+                            
+                        </ul>
+                    </li>
+                              
+
+                    <li class="dropdown">
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                    <i class="fa fa-bell "></i>
+                      <span class="label-count" style="background:red"><?php echo $numOfFiveDaysToPay;?></span>
                         </a>
-                                            </li>
+                      
+                        <ul class="dropdown-menu">
+                            <li class="header">ACTIVITY NOTIFICATIONS</li>
+                            <li class="body">
+                            <li >
+                           
+                            <a onclick="switchTable('fivedaysto')" data-target="#navbar-collapse" ><i class="fa fa-flag text-primary"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysToPay;?>&nbsp;&nbsp;Plan/s due within 5 days</li>  </a>
+                            <li role="separator" class="divider"></li>
+                            <li >
+                            <a onclick="switchTable('fivedaysago')" data-target="#navbar-collapse" ><i class="fa fa-flag  text-danger"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysToPay;?> Plan/s overdue by five days</li> </a>
+                            <li role="separator" class="divider"></li>
+                            <li ><a href="javascript:void(0);"><i class="fa fa-bar-chart text-success"></i>&nbsp;&nbsp;Important Analysis graph</li></a>
+                            <li role="separator" class="divider"></li>
+                            <li style="background:#1269ad;color:white" ><a href="javascript:void(0);"></li></a>
+                            
+                        </ul>
+                    </li>
                    
                     <!-- #END# Tasks -->
                     <li class="dropdown">
@@ -386,7 +491,7 @@ if(isset($_SESSION['admin'])){
                             </ul>
                         </div>
                        <div class="body">
-                            <div id="unapproved" class="table-responsive">
+                           <div id="unapproved" class="table-responsive">
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                     <thead>
                                         <tr>
@@ -564,7 +669,7 @@ if(isset($_SESSION['admin'])){
                                         </tfoot>
                                         <tbody>
                                         <?php
-                                foreach ($activeplans2 as $active => $value)
+                                foreach ($activeplans as $active => $value)
                                 {
                                     $reg = $value['reg_number'];
                                     $personal = $dbHelper->getDetails('personal','reg_number', $reg);
@@ -771,7 +876,7 @@ if(isset($_SESSION['admin'])){
                                         
                                             for($i=0; $i<$in ;$i++ ){
 
-                                            $name=$info[$i]['reg_number'];
+                                            $name=$settledplans[$i]['reg_number'];
                                             $data3=$dbHelper->getDetails('personal','reg_number', $name);
                                             $data4=$dbHelper->getDetails('education','reg_number', $name);
                                             $data5=$dbHelper->getDetails('accounts','reg_number', $name);
@@ -792,7 +897,7 @@ if(isset($_SESSION['admin'])){
                                                 <td><?php echo $data4[0]['program'];?></td>
                                                 <td><?php echo $data4[0]['intake'];?></td>
                                                 <td><?php echo $place;?></td>
-                                                <td><?php echo $info[$i]['plan_span'];?></td>
+                                                <td><?php echo $settledplans[$i]['plan_span'];?></td>
                                                 <td>$<?php echo $data5[0]['totalfeesacrued']-$data5[0]['totalpayments'];?>-00</td>
   
                                                 </tr>
@@ -805,6 +910,115 @@ if(isset($_SESSION['admin'])){
                                         </tbody>
                                     </table>
                                     </div>
+                                        <!-- 5days to become due -->
+                                    <div id="fivedaysto" class="table-responsive d-none">
+                                        <table  class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                            <thead>
+                                                <tr>
+                                                <th>Reg Number</th>
+                                                    <th>Full Name</th>
+                                                    <th>Programme</th>
+                                                    <th>Intake</th>
+                                                    <th>Resident</th>
+                                                    <th>Span</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                <th>Reg Number</th>
+                                                    <th>Full Name</th>
+                                                    <th>Programme</th>
+                                                    <th>Intake</th>
+                                                    <th>Resident</th>
+                                                    <th>Span</th>
+                                                    
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                            <?php
+
+                                            foreach ( $dueinfivedays as $due => $value)
+                                            {
+                                                $reg = $value['reg_number'];
+                                                $personal = $dbHelper->getDetails('personal','reg_number', $reg);
+                                                $userInfo = $dbHelper->getDetails('applicants','reg_number', $reg);
+                                                $eduDetails = $dbHelper->getDetails('education','reg_number', $reg);
+                                                $accountDetails = $dbHelper->getDetails('accounts','reg_number', $reg);
+                                                ?>
+
+                                                <tr class='def-row'>
+                                                            
+                                                    <td><?php echo $reg;?></td>
+                                                    <td><?php echo $personal[0]['surname'];?> <?php echo $personal[0]['name'];?></td>
+                                                
+                                                    <td><?php echo $eduDetails[0]['program'];?></td>
+                                                    <td><?php echo $eduDetails[0]['intake'];?></td>
+                                                    <td><?php echo $value['plan_span'];?></td>
+                                                    <td><?php echo date("Y-m-d",  strtotime("today" .'+5 days'))?></td>
+                                                </tr>
+                                            <?php
+                                            #end foreach
+                                            }
+                                            ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div id="fivedaysago" class="table-responsive d-none">
+                                        <table  class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                            <thead>
+                                                <tr>
+                                                <th>Reg Number</th>
+                                                    <th>Full Name</th>
+                                                    <th>Programme</th>
+                                                    <th>Intake</th>
+                                                    <th>Resident</th>
+                                                    <th>Span</th>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                <th>Reg Number</th>
+                                                    <th>Full Name</th>
+                                                    <th>Programme</th>
+                                                    <th>Intake</th>
+                                                    <th>Resident</th>
+                                                    <th>Span</th>
+                                                    
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                            <?php
+
+                                            foreach ( $dueinfivedaysago as $due => $value)
+                                            {
+                                                $reg = $value['reg_number'];
+                                                $personal = $dbHelper->getDetails('personal','reg_number', $reg);
+                                                $userInfo = $dbHelper->getDetails('applicants','reg_number', $reg);
+                                                $eduDetails = $dbHelper->getDetails('education','reg_number', $reg);
+                                                $accountDetails = $dbHelper->getDetails('accounts','reg_number', $reg);
+                                                ?>
+
+                                                <tr class='def-row'>
+                                                            
+                                                    <td><?php echo $reg;?></td>
+                                                    <td><?php echo $personal[0]['surname'];?> <?php echo $personal[0]['name'];?></td>
+                                                
+                                                    <td><?php echo $eduDetails[0]['program'];?></td>
+                                                    <td><?php echo $eduDetails[0]['intake'];?></td>
+                                                    <td><?php echo $value['plan_span'];?></td>
+                                                    <td><?php echo date("Y-m-d",  strtotime("today" .'+5 days'))?></td>
+                                                </tr>
+                                            <?php
+                                            #end foreach
+                                            }
+                                            ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>
