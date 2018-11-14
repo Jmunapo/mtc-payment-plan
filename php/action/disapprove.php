@@ -9,10 +9,10 @@ require_once("../hawk/DBHelper.php");
 if(isset($_POST['inputValue']))
 {
    
-    $phone=$_POST['phone_number'];
+    $phone=$_POST['phone'];
     
   
-    $phone      =$_POST['phone_number'];
+    $phone      =$_POST['phone'];
     $person     =$db->getDetails('personal','phone',$phone);
     $reg_number =$person[0]['reg_number'];
     $plan       =$db->getDetails('applicants','reg_number',$reg_number);
@@ -51,7 +51,7 @@ if(isset($_POST['inputValue']))
     // send via BulkSMS HTTP API
 
     $ws_str = $bulksms_ws . '&u=' . $username . '&h=' . $token . '&op=pv';
-    $ws_str .= '&to=' . urlencode($destinations) . '&msg='.urlencode($message);
+    $ws_str .= '&to=0' . urlencode($destinations) . '&msg='.urlencode($message);
     $ws_response = @file_get_contents($ws_str);
 
 

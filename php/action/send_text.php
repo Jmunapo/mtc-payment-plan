@@ -10,12 +10,12 @@ require_once("../hawk/DBHelper.php");
 	
 
 	
-
+$message="";
  
-if(isset($_POST['phone_number']))
+if(isset($_POST['phone']))
 {
     
-    $phone      =$_POST['phone_number'];
+    $phone      =$_POST['phone'];
     $person     =$db->getDetails('personal','phone',$phone);
     $reg_number =$person[0]['reg_number'];
     $plan       =$db->getDetails('applicants','reg_number',$reg_number);
@@ -47,15 +47,15 @@ if(isset($_POST['phone_number']))
     $destinations = $phone;
 
     // SMS Message to send
-	$message = "Great !! ,Your $span month/s payment plan has been approved,You can register now.Enjoy your studies and Comply to your plan ";
+	  $message = "Great !! ,Your $span month/s plan ";
 
     // send via BulkSMS HTTP API
 
     $ws_str = $bulksms_ws . '&u=' . $username . '&h=' . $token . '&op=pv';
-    $ws_str .= '&to=' . urlencode($destinations) . '&msg='.urlencode($message);
+    $ws_str .= '&to=0' . urlencode($destinations) . '&msg='.urlencode($message);
 	$ws_response = @file_get_contents($ws_str);
 	
-
+ 
 
      //run sql queries here
      $date           =date("Y-m-d");
@@ -69,12 +69,11 @@ if(isset($_POST['phone_number']))
       
     );
 
-    $entered = $db->insertData($notice);
+     $entered = $db->insertData($notice);
+
 
 }
-
     ?>
-
 
 {
 	 <?php echo $message; ?>
@@ -82,6 +81,6 @@ if(isset($_POST['phone_number']))
 
 
 
-}
 
+}
 

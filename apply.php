@@ -28,7 +28,7 @@ if(isset($_SESSION['student'])){
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Mtc Plan Apply</title>
     <!-- Favicon-->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="download.png" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -52,7 +52,9 @@ if(isset($_SESSION['student'])){
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="css/themes/all-themes.css" rel="stylesheet" />
-
+    <?php
+        include('./ui/terms_and_conditions.html');
+     ?>
     <!-- -------------------------------------------------------------------------------------------------- -->
 
     <!-- Bootstrap Material Datetime Picker Css -->
@@ -171,25 +173,12 @@ if(isset($_SESSION['student'])){
 
                                 <div class="form-group">
                                     <input type="checkbox" id="accept_terms" name="accept_terms" required>
-                                    <label for="accept_terms">I have <a class="readTnC" data-color="light-blue">read and accept the terms</a></label>
+                                    <label for="accept_terms">I have <a class="readTnC">read and accept the terms</a></label>
                                 </div>
                                 <button class="btn btn-primary waves-effect" type="submit">APPLY</button>
                             </form>
 
-                            <!-- For Material Design Colors -->
-                            <div class="modal fade" id="mdModal" tabindex="-1" role="dialog">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="defaultModalLabel">Mtc PLAN Terms & Conditions:</h4>
-                                        </div>
-                                        <div class="modal-body">
-                           <h4>Introdction</h4>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" id="accept" class="btn btn-link waves-effect">ACCEPT</button>
-                                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">DECLINE</button>
-                                        </div>
+                   
                                     </div>
                                 </div>
                             </div>

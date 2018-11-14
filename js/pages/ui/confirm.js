@@ -17,9 +17,16 @@ $(function () {
         else if (type === 'success') {
             showSuccessMessage();
         }
-        else if (type === 'with-custom-icon') {
+        else if (type ==='with-custom-icon') {
             showWithCustomIconMessage();
         }
+        else if (type === 'prompt3') {
+            showPromptMessage3();
+        }
+        else if (type === 'with-custom-icon2') {
+            showWithCustomIconMessage2();
+        }
+        
     });
 });
 $(function () {
@@ -35,6 +42,9 @@ $(function () {
         else if (type === 'prompt2') {
             showPromptMessage2();
         }
+        else if (type === 'prompt3') {
+            showPromptMessage3();
+        }
         else if (type === 'prompt') {
             showPromptMessage();
         }
@@ -46,6 +56,9 @@ $(function () {
         }
         else if (type === 'with-custom-icon') {
             showWithCustomIconMessage();
+        }
+        else if (type === 'with-custom-icon2') {
+            showWithCustomIconMessage2();
         }
     });
 });
@@ -79,9 +92,9 @@ function showPromptMessage() {
         if (inputValue === "") {
             swal.showInputError("please type a reason"); return false
         }
-        var obj = {phone_number}
+        var obj = {phone}
         console.log(obj);
-        $.post('../php/action/disapprove.php?text=fvcff', {inputValue ,phone_number}, (res)=>{
+        $.post('../php/action/disapprove.php?text=fvcff', {inputValue ,phone}, (res)=>{
         console.log(res);
         });
         swal("Disapproved", "Message send: ", "success");
@@ -102,9 +115,10 @@ function showAjaxLoaderMessage() {
         showLoaderOnConfirm: true,
     }, function (a) {
         if(!a) return;
-        var obj = {phone_number}
+        var obj = {phone}
         console.log(obj);
-       $.post('../php/action/send_text.php?text=fvcff', {phone_number}, (src)=>{
+        var type = "approve";
+       $.post('../php/action/send_text.php?text=fvcff', {phone}, (src)=>{
         console.log(src);
        });
 
@@ -115,14 +129,28 @@ function showAjaxLoaderMessage() {
     });
 }
 function showWithCustomIconMessage() {
-    var obj = {phone_number}
+    var obj = {phone}
         console.log(obj);
-        $.post('../php/action/send_text2.php?text=fvcff', {phone_number}, (src)=>{
+        var type = "default";
+        $.post('../php/action/send_text2.php?text=fvcff', {phone, type}, (src)=>{
             console.log(src);
            });
     swal({
         title: "MTC PLAN",
-        text:`Automatic SMS send to ${phone_number}`,
+        text:`Automatic SMS send to ${phone}`,
+        imageUrl: "../images/download.png"
+    });
+}
+function showWithCustomIconMessage2() {
+    var obj = {phone}
+        console.log(obj);
+        var type = "active";
+        $.post('../php/action/send_text2.php?text=fvcff', {phone, type}, (src)=>{
+            console.log(src);
+           });
+    swal({
+        title: "MTC PLAN",
+        text:`Automatic SMS send to ${phone}`,
         imageUrl: "../images/download.png"
     });
 }
@@ -141,9 +169,33 @@ function showPromptMessage2() {
         if (inputValue === "") {
             swal.showInputError("please type your message"); return false
         }
-        var obj = {phone_number}
+        var obj = {phone}
         console.log(obj);
-        $.post('../php/action/disapprove.php?text=fvcff', {inputValue ,phone_number}, (res)=>{
+        $.post('../php/action/disapprove.php?text=fvcff', {inputValue ,phone}, (res)=>{
+        console.log(res);
+        });
+        swal("Succefull", "Message send: ", "success");
+    });
+}
+function showPromptMessage3() {
+    swal({
+        title: "MTC PLAN",
+        text: "Please type the message to be send:",
+        type: "input",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        animation: "slide-from-top",
+        inputPlaceholder: "type the message here"
+    }, function (inputValue) {
+       
+        if (inputValue === false) return false;
+        if (inputValue === "") {
+            swal.showInputError("please type your message"); return false
+        }
+        var obj = {phone}
+        console.log(obj);
+        var type="active";
+        $.post('../php/action/send_text2.php?text=fvcff', {inputValue ,phone ,type}, (res)=>{
         console.log(res);
         });
         swal("Succefull", "Message send: ", "success");

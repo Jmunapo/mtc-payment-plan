@@ -11,8 +11,8 @@ if(isset($_SESSION['admin'])){
 
         $username=$_REQUEST['reg'];
        
-        $data0 = $db->getDetails('admin_login','username', $admin_username);
-        $data=$db->getDetails('applicants','reg_number', $username);
+        $data = $db->getDetails('admin_login','username', $admin_username);
+        $data0=$db->getDetails('applicants','reg_number', $username);
         $data2=$db->getDetails('personal','reg_number', $username);
         $data3=$db->getDetails('education','reg_number', $username);
 
@@ -28,7 +28,7 @@ if(isset($_SESSION['admin'])){
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Mutare Teachers College</title>
     <!-- Favicon-->
-    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../download.png" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -53,6 +53,15 @@ if(isset($_SESSION['admin'])){
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="../css/themes/all-themes.css" rel="stylesheet" />
 
+    <!-- includes-->
+    <?php
+        include('lib/includes/sidenav.php');
+     ?>
+
+      <?php
+        include('lib/includes/topnav.php');
+     ?>
+
     
     <link rel="stylesheet" href="../fa/css/font-awesome.css">
     <style>
@@ -62,7 +71,7 @@ if(isset($_SESSION['admin'])){
     </style>
 
     <script>
-        var phone_number=<?php echo $data2[0]['phone'];?>;
+        var phone =<?php echo $data2[0]['phone'];?>;
     </script>
 </head>
 
@@ -99,160 +108,9 @@ if(isset($_SESSION['admin'])){
         </div>
     </div>
     <!-- #END# Search Bar -->
-    <nav class="navbar ">
-        <div class="container-fluid top">
-            <div class="navbar-header">
-                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
-                <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand fa fa-bars " href="index.php"> MTC ADMIN PANEL</a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Call Search -->
-                    <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
-                    <!-- #END# Call Search -->
-                    <!-- Notifications -->
-                 
-                    <!-- #END# Notifications -->
-                    <!-- Tasks -->
-                    
-                    <li class="dropdown" style="margin-right:">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                            <i class="fa fa-graduation-cap fa-2x"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">MY ACCOUNT</li>
-                            <li class="body">
-
-                            <li><a href="javascript:void(0);"><i class="fa fa-graduation-cap fa-2x text-success"></i>&nbsp;&nbsp;My Profile</li></a>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="fa fa-envelope fa-2x" style="color:#1269ad"></i>&nbsp;&nbsp;MTC-Mail</li></a>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="fa fa-sign-out fa-2x text-primary"></i>&nbsp;&nbsp;Sign Out</li></a>
-                            
-              
-                        </ul>
-                    </li>
-                    <!-- #END# Tasks -->
-                    <li class="pull-right"><a href="javascript:void(0);" data-close="true"><i class="fa fa-diamond fa-2x" style="color:gold"></i></a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    
     <!-- #Top Bar -->
-    <section>
-        <!-- Left Sidebar -->
-        <aside id="leftsidebar" class="sidebar">
-            <!-- User Info -->
-            <div class="user-info">
-                <div class="image">
-                <img src="../uploads/<?php echo $data0[0]['image']; ?> " width="45" height="55" alt="User" />
-                </div>
-                <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $data0[0]['full_name'] ;?></div>
-                    <div class="email"><?php echo $data0[0]['post'] ;?></div>
-                  
-                </div>
-            </div>
-            <!-- #User Info -->
-            <!-- Menu -->
-            <div class="menu">
-                <ul class="list">
-                    <li class="header" style="background-color:#1269ad;color:white">MAIN NAVIGATION</li>
-                    <li class="active">
-                        <a href="index.php">
-                            <i class="fa fa-home">
-                            <span>Home</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="all.php">
-                            <i class="fa fa-database">
-                            <span>All Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="plan-applicants.php">
-                            <i class="fa fa-folder-open">
-                            <span>Payment Plans</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="registered.php">
-                            <i class="fa fa-cubes">
-                            <span>Registered Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="un-registered.php">
-                            <i class="fa fa-close">
-                            <span>Un-Registered Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="deffered.php">
-                            <i class="fa fa-exclamation-triangle">
-                            <span>Deffered Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="index.php">
-                            <i class="fa fa-envelope" style="color:#1269ad">
-                            <span  style="color:#1269ad">MTC Mail</span>
-                        </a></i>
-                        
-                    </li>
-                    <hr>
-                    <li class="#">
-                        <a href="my-profile.php">
-                            <i class="fa fa-graduation-cap">
-                            <span>My Profile</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="app.php">
-                            <i class="fa fa-whatsapp text-success">
-                            <span>whatsapp</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="tweeter.php">
-                            <i class=" fa fa-twitter text-primary">
-                            <span>Tweeter</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="signout.php">
-                            <i class=" fa fa-sign-out text-danger">
-                            <span>Sign Out</span>
-                        </a></i>
-                        
-                    </li>
-                  
-                   
-                </ul>
-            </div>
-            <!-- #Menu -->
-            <!-- Footer -->
-            <div class="legal"style="background:#1269ad;color:white;font-family:New-Times-Roman" >
-                <div class="copyright"  >
-                   MTC &copy;2018  youngkunjez & joemags .
-                </div>
-            </div>
-            <!-- #Footer -->
-        </aside>
-        <!-- #END# Left Sidebar -->
-       
-    </section>
+    
 
     <section class="content">
         <div class="container-fluid">
@@ -345,33 +203,33 @@ if(isset($_SESSION['admin'])){
                                 </div>
 
                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <p><?php echo  $data[0]['dateFirst']; ?></p>
+                                    <p><?php echo  $data0[0]['dateFirst']; ?></p>
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <p><?php echo  $data[0]['amountFirst']; ?></p>
+                                    <p><?php echo  $data0[0]['amountFirst']; ?></p>
                                 </div>
                                 <div class="not-show-d col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <p><?php echo $data[0]['dateSecond']; ?></p>
+                                    <p><?php echo $data0[0]['dateSecond']; ?></p>
                                 </div>
                                 <div class="not-show-a col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <p><?php echo  $data[0]['amountSecond']; ?></p>
+                                    <p><?php echo  $data0[0]['amountSecond']; ?></p>
                                 </div>
                                 <div class="not-show-d col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <p><?php echo $data[0]['dateThird']; ?></p>
+                                    <p><?php echo $data0[0]['dateThird']; ?></p>
                                 </div>
                                 <div class="not-show-a col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <p><?php echo  $data[0]['amountThird']; ?></p>
+                                    <p><?php echo  $data0[0]['amountThird']; ?></p>
                                 </div>
                                 <div class="not-show-d col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <p><?php echo $data[0]['dateFourth']; ?></p>
+                                    <p><?php echo $data0[0]['dateFourth']; ?></p>
                                 </div>
                                 <div class="not-show-a col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <p><?php echo  $data[0]['amountFourth']; ?></p>
+                                    <p><?php echo  $data0[0]['amountFourth']; ?></p>
                                 </div>
 
                                 <div class="col-xs-12 txt ">
                                     <p><b>SUBMITTED REASON</b></p>
-                                            <p><?php echo $data[0]['reason']; ?></P>
+                                            <p><?php echo $data0[0]['reason']; ?></P>
                                 </div>
                                 <style>
                                     .changcolor{
@@ -379,7 +237,7 @@ if(isset($_SESSION['admin'])){
                                     }
                                 </style>
                                 <?php
-                                $status=$data[0]['status'];
+                                $status=$data0[0]['status'];
                                 if($status=='approved'){
                                  ?>
                                  <div class="col-xs-12 ">

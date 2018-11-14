@@ -2,10 +2,18 @@ $('.def-row').click($event=>{
     var regNumber = $($event.target.parentNode)[0].children[0].innerText;
     window.location = `defaulters.php?reg=${regNumber}`;
 })
+$('.active-row').click($event=>{
+    var regNumber = $($event.target.parentNode)[0].children[0].innerText;
+    window.location = `active.php?reg=${regNumber}`;
+})
 
 $('.plan-row').click($event=>{
     var regNumber = $($event.target.parentNode)[0].children[0].innerText;
     window.location = `view-plan.php?reg=${regNumber}`;
+})
+$('.plan-rows').click($event=>{
+    var regNumber = $($event.target.parentNode)[0].children[0].innerText;
+    window.location = `view-plans.php?reg=${regNumber}`;
 })
 
 var curr = 'unapproved';

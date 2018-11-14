@@ -125,6 +125,8 @@ function testRange2($DbDate){
     $fiveDaysToGo = date_modify(new DateTime("today"), '-5 day');
     $nowDate = new DateTime("today");
     $numberofDays=$nowDate->diff($DbDate);
+    $nom = $numberofDays->format(' %a days');
+  
     return ( $fiveDaysToGo<= $DbDate && $DbDate <=$nowDate  );
 }
 
@@ -166,11 +168,12 @@ $numOfFiveDaysago = count($dueinfivedaysago);
 <html>
 
 <head>
+    
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>MTC Plan Applicants</title>
     <!-- Favicon-->
-    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../download.png" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -197,9 +200,24 @@ $numOfFiveDaysago = count($dueinfivedaysago);
     <link href="../css/themes/all-themes.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="assets/css/main.css">
+
+    <!--includes -->
+    <?php
+        include('lib/includes/sidenav.php');
+     ?>
 </head>
 
 <body class="theme-red">
+
+
+    <!-- Plans Js Variable -->
+    <script>
+        var all_plans = Number(<?php echo count($allApplicants); ?>);
+        var active_plans = Number(<?php echo count($activeplans); ?>);
+        var settled_plans = Number(<?php echo count($settledplans); ?>);
+        var defaulted_plans = Number(<?php echo count($defaulters); ?>);
+    </script>
+    <!-- #END of Plans Js Variable -->
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -237,7 +255,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand fa fa-bars " href="index.php"> MTC ADMIN PANEL</a>
+                <a class=" navbar-brand center"  href="#"><img src="../images/download.png"  height="44px" style="margin-top:-20px"></a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -245,27 +263,18 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                     <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
                     <!-- #END# Call Search -->
                     <!-- Notifications -->
-
-
-
-
-
-
- 
                     <li class="dropdown">
                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                            <i class="fa fa-bell"></i>
-                            <span class="label-count menu1action" id="menu1action"><?php echo count($unapprovedApplic);?></span>
+                            <i class="fa fa-bell" data-toggle="tooltip" role="button"  data-placement="left" title="click to view submitted applications"></i>
+                            <span class="label-count "data-toggle="tooltip" role="button"  data-placement="left" title="click to view submitted applications"><?php echo count($unapprovedApplic);?></span>
                         </a>
                         <ul class="dropdown-menu menu1">
                             <li class="header">APPLICANTS NOTIFICATIONS</li>
                             <li class="body">
                             <li >
-                            <a onclick="switchTable('fivedaysto')" data-target="#navbar-collapse" ><i class="fa fa-flag text-primary"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysToPay;?>&nbsp;&nbsp;Plan/s due within 5 days</li>  </a>
+                            <a href="#top" onclick="switchTable('unapproved')" data-target="#navbar-collapse" ><i class="fa fa-flag fa-2x  text-primary"></i>&nbsp;&nbsp;<?php echo count($unapprovedApplic);?>&nbsp;&nbsp;Applicant/s are waiting..</li>  </a>
                             <li role="separator" class="divider"></li>
-                            <li ><a href="javascript:void(0);"><i class="fa fa-flag  text-danger"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysago;?> Plan/s overdue by five days</li> </a>
-                            <li role="separator" class="divider"></li>
-                            <li ><a href="javascript:void(0);"><i class="fa fa-bar-chart text-success"></i>&nbsp;&nbsp;Important Analysis graph</li></a>
+                            <li ><a href="#graph"><i class="fa fa-bar-chart fa-2x text-success"></i>&nbsp;&nbsp;Important Analysis graph</li></a>
                             <li role="separator" class="divider"></li>
                             <li style="background:#1269ad;color:white" ><a href="javascript:void(0);"></li></a>
                             
@@ -274,9 +283,9 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                               
 
                     <li class="dropdown">
-                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                    <i class="fa fa-bell "></i>
-                      <span class="label-count" style="background:red"><?php echo $numOfFiveDaysToPay;?></span>
+                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" >
+                    <i class="fa fa-bell" data-toggle="tooltip" role="button"  data-placement="left" title="click to view due & overdue plans"></i>
+                      <span class="label-count" data-toggle="tooltip" role="button"  data-placement="left" title="click to view due & overdue plans" style="background:red"><?php echo $numOfFiveDaysToPay + $numOfFiveDaysago;?></span>
                         </a>
                       
                         <ul class="dropdown-menu">
@@ -284,12 +293,12 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                             <li class="body">
                             <li >
                            
-                            <a onclick="switchTable('fivedaysto')" data-target="#navbar-collapse" ><i class="fa fa-flag text-primary"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysToPay;?>&nbsp;&nbsp;Plan/s due within 5 days</li>  </a>
+                            <a href="#top" onclick="switchTable('due')" data-target="#navbar-collapse" ><i class="fa fa-flag fa-2x  text-primary"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysToPay;?>&nbsp;&nbsp;Plan/s due within 5 days</li>  </a>
                             <li role="separator" class="divider"></li>
                             <li >
-                            <a onclick="switchTable('fivedaysago')" data-target="#navbar-collapse" ><i class="fa fa-flag  text-danger"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysToPay;?> Plan/s overdue by five days</li> </a>
+                            <a href="#top" onclick="switchTable('overdue')" data-target="#navbar-collapse" ><i class="fa fa-flag fa-2x   text-danger"></i>&nbsp;&nbsp;<?php echo $numOfFiveDaysago;?> Plan/s overdue by five days</li> </a>
                             <li role="separator" class="divider"></li>
-                            <li ><a href="javascript:void(0);"><i class="fa fa-bar-chart text-success"></i>&nbsp;&nbsp;Important Analysis graph</li></a>
+                            <li ><a href="#graph"><i class="fa fa-bar-chart fa-2x text-success"></i>&nbsp;&nbsp;Important Analysis graph</li></a>
                             <li role="separator" class="divider"></li>
                             <li style="background:#1269ad;color:white" ><a href="javascript:void(0);"></li></a>
                             
@@ -299,7 +308,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                     <!-- #END# Tasks -->
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                            <i class="fa fa-graduation-cap fa-2x"></i>
+                            <i class="fa fa-graduation-cap" data-toggle="tooltip" role="button"  data-placement="left" title="click to view account options"></i>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">MY ACCOUNT</li>
@@ -309,7 +318,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                             <li role="separator" class="divider"></li>
                             <li><a href="javascript:void(0);"><i class="fa fa-envelope fa-2x" style="color:#1269ad"></i>&nbsp;&nbsp;MTC-Mail</li></a>
                             <li role="separator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="fa fa-sign-out fa-2x text-primary"></i>&nbsp;&nbsp;Sign Out</li></a>
+                            <li><a href="javascript:void(0);"  class="signout-btn"><i class=" fa fa-sign-out fa-2x text-primary"></i>&nbsp;&nbsp;Sign Out</li></a>
                             
               
                         </ul>
@@ -321,137 +330,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
         </div>
     </nav>
     <!-- #Top Bar -->
-    <section>
-        <!-- Left Sidebar -->
-        <aside id="leftsidebar" class="sidebar">
-            <!-- User Info -->
-            <div class="user-info">
-                <div class="image">
-                <img src="../uploads/<?php echo $data[0]['image']; ?> " width="45" height="55" alt="User" />
-                </div>
-                <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $data[0]['full_name'] ;?></div>
-                    <div class="email"><?php echo $data[0]['post'] ;?></div>
-                  
-                </div>
-            </div>
-            <!-- #User Info -->
-            <!-- Menu -->
-            <div class="menu">
-                <ul class="list">
-                    <li class="header" style="background-color:#1269ad;color:white">MAIN NAVIGATION</li>
-                    <li class="#">
-                        <a href="index.php">
-                            <i class="fa fa-home">
-                            <span>Home</span>
-                        </a></i>
-                    </li>
-                    <li class="active" >
-                        <a href="javascript:void(0);" class="menu-toggle" >
-                            <i class="fa fa-folder-open">&nbsp;&nbsp;&nbsp;PAYMENT PLANS</i>
-                        </a>
-                        <ul class="ml-menu" >
-                            <li class="#">
-                            <a onclick="switchTable('unapproved')" data-target="#navbar-collapse"  class="navbar-toggle fa fa-exclamation-triangle text-warning removehove" href="javascript:;">&nbsp;&nbsp;&nbsp;Unapproved Plans</a>
-                            </li>
-                            <li>
-                            <a onclick="switchTable('approved')" data-target="#navbar-collapse"  class="navbar-toggle fa fa-check text-success" href="javascript:;"> &nbsp;&nbsp;&nbsp;Approved Plans</a>
-                            </li>
-                            <li>
-                            <a onclick="switchTable('defaulters')" data-target="#navbar-collapse"  class="navbar-toggle fa fa-close text-danger " href="javascript:;"> &nbsp;&nbsp;&nbsp;Defaulted Plans</a>
-                            </li>
-                            <li>
-                            <a onclick="switchTable('settled')" data-target="#navbar-collapse"  class="navbar-toggle fa fa-check-square" href="javascript:;"> &nbsp;&nbsp;&nbsp;Settled Plans</a>
-                            </li>
-                            <li>
-                            <a onclick="switchTable('active')" data-target="#navbar-collapse"  class="navbar-toggle fa fa-refresh" href="javascript:;"> &nbsp;&nbsp;&nbsp;Active</a>
-                            </li>
-                            <li>
-                            <a onclick="switchTable('all')" data-target="#navbar-collapse"  class="navbar-toggle fa fa-bars" href="javascript:;"> &nbsp;&nbsp;&nbsp;All Plans</a>
-                            </li>
-                        </ul>
-                    
-                    </li>
-                    <li class="#">
-                        <a href="all.php">
-                            <i class="fa fa-database">
-                            <span>All Students</span>
-                        </a></i>
-                        
-                    </li>
- 
-                    <li class="#">
-                        <a href="registered.php">
-                            <i class="fa fa-cubes">
-                            <span>Registered Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="un-registered.php">
-                            <i class="fa fa-close">
-                            <span>Un-Registered Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="deffered.php">
-                            <i class="fa fa-exclamation-triangle">
-                            <span>Deffered Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="index.php">
-                            <i class="fa fa-envelope" style="color:#1269ad">
-                            <span  style="color:#1269ad">MTC Mail</span>
-                        </a></i>
-                        
-                    </li>
-                    <hr>
-                    <li class="#">
-                        <a href="my-profile.php">
-                            <i class="fa fa-graduation-cap">
-                            <span>My Profile</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="app.php">
-                            <i class="fa fa-whatsapp text-success">
-                            <span>whatsapp</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="tweeter.php">
-                            <i class=" fa fa-twitter text-primary">
-                            <span>Tweeter</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="signout.php">
-                            <i class=" fa fa-sign-out text-danger">
-                            <span>Sign Out</span>
-                        </a></i>
-                        
-                    </li>
-                  
-                   
-                </ul>
-            </div>
-            <!-- #Menu -->
-            <!-- Footer -->
-            <div class="legal"style="background:#1269ad;color:white;font-family:New-Times-Roman" >
-                <div class="copyright"  >
-                   MTC &copy;2018  youngkunjez & joemags .
-                </div>
-            </div>
-            <!-- #Footer -->
-        </aside>
-        <!-- #END# Left Sidebar --> 
-    </section>
+   
 
     <section class="content">
         <div class="container-fluid">
@@ -461,21 +340,18 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                 </h2>
             </div>
             <!-- Exportable Table -->
-            <div class="row clearfix">
+            <div class="row clearfix" >
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
+                    <div class="card" id="top">
                         <div class="header">
                             <h2 id="applicants-title">
                                 unapproved plans
                             </h2>
                             <ul class="header-dropdown m-r--5">
-                                <li>
-                                    
-                                    <button type="button" id="notify" class="d-none btn bg-teal btn-lg waves-effect m-r-10 changcolor ">Notify All Defaulters</button>
-                                </li> 
+                              
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
+                                        <i class="material-icons" style="color:white">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
                                         <li><a onclick="switchTable('unapproved')" href="javascript:;">Unapproved</a></li>
@@ -618,7 +494,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                $place="No";
                                            }
                                             ?>
-                                            <tr class='plan-row'>
+                                            <tr class='active-row'>
                                             
                                             <td><?php echo $name;?></td>
                                             <td><?php echo $data3[0]['surname'];?>&nbsp;<?php echo $data3[0]['name'];?></td>
@@ -688,7 +564,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                     
                                     ?>
 
-                                    <tr class='def-row'>
+                                    <tr class='active-row'>
                                                 
                                         <td><?php echo $reg;?></td>
                                         <td><?php echo $personal[0]['surname'];?> <?php echo $personal[0]['name'];?></td>
@@ -703,7 +579,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                             <?php
                                         }
                                         
-                                        elseif($statusValue >10 &&  $statusValue < 50){
+                                        elseif($statusValue >=10 &&  $statusValue < 50){
                                             ?>
                                              <td style="background:#1269ad;color:white"><?php echo $statusValue;?> %</td>
                                              <?php
@@ -735,7 +611,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                             <th>Intake</th>
                                             <th>Resident</th>
                                             <th>Span</th>
-                                            <th>Balance</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -746,7 +622,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                             <th>Intake</th>
                                             <th>Resident</th>
                                             <th>Span</th>
-                                            <th>Balance</th>
+                                           
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -762,6 +638,9 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                            $data5=$dbHelper->getDetails('accounts','reg_number', $name);
                                            $res=$data4[0]['resident'];
                                            $place="";
+                                           $status=$unapprovedApplic[0]['status'];
+                                           $stas="";
+                                             
                                            if($res==1){
                                                $place="Yes";
                                            }
@@ -769,7 +648,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                $place="No";
                                            }
                                             ?>
-                                            <tr class='plan-row'>
+                                            <tr class='plan-rows'>
                                             
                                             <td><?php echo $name;?></td>
                                             <td><?php echo $data3[0]['surname'];?>&nbsp;
@@ -779,11 +658,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                             <td><?php echo $data4[0]['intake'];?></td>
                                             <td><?php echo $place;?></td>
                                             <td><?php echo $unapprovedApplic[0]['plan_span'];?></td>
-                                            <td>$<?php echo $data5[0]['totalfeesacrued']-$data5[0]['totalpayments'];?>-00</td>
-                                         
-                                          
                                             
-                                          
                                             </tr>
                                             
                                         <?php    
@@ -804,7 +679,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                         <th>Programme</th>
                                         <th>Intake</th>
                                         <th>Span</th>
-                                        <th>Balance</th>
+                                        <th>status</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -814,7 +689,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                         <th>Programme</th>
                                         <th>Intake</th>
                                         <th>Span</th>
-                                        <th>Balance</th>
+                                        <th>status</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -826,8 +701,18 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                     $userInfo = $dbHelper->getDetails('applicants','reg_number', $reg);
                                     $eduDetails = $dbHelper->getDetails('education','reg_number', $reg);
                                     $accountDetails = $dbHelper->getDetails('accounts','reg_number', $reg);
-                                    ?>
+                                    $status=$userInfo[0]['status'] ;
+                                    $statusValue=" ";
+                                    if($status =="approved"){
 
+                                        $statusValue = "0";
+                                    }
+                                    else{
+                                        $statusValue=$status;
+                                    }    
+                                    
+                                    ?>
+                                    
                                     <tr class='def-row'>
                                                 
                                         <td><?php echo $reg;?></td>
@@ -836,16 +721,36 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                         <td><?php echo $eduDetails[0]['program'];?></td>
                                         <td><?php echo $eduDetails[0]['intake'];?></td>
                                         <td><?php echo $value['plan_span'];?></td>
-                                        <td>$<?php echo $accountDetails[0]['totalfeesacrued']-$accountDetails[0]['totalpayments'];?>-00</td>
+                                       
+                                        <?php
+                                        if($statusValue >=0 &&  $statusValue < 10){
+                                            ?>
+                                            <td style="background:red;color:white"><?php echo $statusValue;?> %</td>
+                                            <?php
+                                        }
+                                        
+                                        elseif($statusValue >10 &&  $statusValue < 50){
+                                            ?>
+                                             <td style="background:#1269ad;color:white"><?php echo $statusValue;?> %</td>
+                                             <?php
+                                        }
+                                        else{
+                                            ?>
+                                             <td style="background:green;color:white"><?php echo $statusValue;?> %</td>
+                                             <?php
+                                        }
+                                       ?>
                                     </tr>
                                 <?php
                                 #end foreach
                                 }
                                 ?>
                                 </tbody>
+                               
                             </table>
+                            <button id="sendMsg2" type="button" data-color="blue"  class="btn btn-blue waves-effect m-r-20" data-toggle="modal" data-target="#largeModal2">SEND MESSAGES</button>
                             </div>
-                    <div id="settled" class="table-responsive d-none">
+                            <div id="settled" class="table-responsive d-none">
 
                                     <table  class="table table-bordered table-striped table-hover dataTable js-exportable">
                                         <thead>
@@ -856,7 +761,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                 <th>Intake</th>
                                                 <th>Resident</th>
                                                 <th>Span</th>
-                                                <th>Balance</th>
+                                                <th>status</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -867,7 +772,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                 <th>Intake</th>
                                                 <th>Resident</th>
                                                 <th>Span</th>
-                                                <th>Balance</th>
+                                                <th>Status</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
@@ -898,7 +803,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                 <td><?php echo $data4[0]['intake'];?></td>
                                                 <td><?php echo $place;?></td>
                                                 <td><?php echo $settledplans[$i]['plan_span'];?></td>
-                                                <td>$<?php echo $data5[0]['totalfeesacrued']-$data5[0]['totalpayments'];?>-00</td>
+                                                <td class="fa fa-check text-success"></td>
   
                                                 </tr>
                                                 
@@ -911,7 +816,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                     </table>
                                     </div>
                                         <!-- 5days to become due -->
-                                    <div id="fivedaysto" class="table-responsive d-none">
+                                    <div id="due" class="table-responsive d-none">
                                         <table  class="table table-bordered table-striped table-hover dataTable js-exportable">
                                             <thead>
                                                 <tr>
@@ -919,7 +824,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                     <th>Full Name</th>
                                                     <th>Programme</th>
                                                     <th>Intake</th>
-                                                    <th>Resident</th>
+                                                    
                                                     <th>Span</th>
                                                     
                                                 </tr>
@@ -930,7 +835,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                     <th>Full Name</th>
                                                     <th>Programme</th>
                                                     <th>Intake</th>
-                                                    <th>Resident</th>
+                                                    
                                                     <th>Span</th>
                                                     
                                                 </tr>
@@ -947,7 +852,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                 $accountDetails = $dbHelper->getDetails('accounts','reg_number', $reg);
                                                 ?>
 
-                                                <tr class='def-row'>
+                                                <tr class='active-row'>
                                                             
                                                     <td><?php echo $reg;?></td>
                                                     <td><?php echo $personal[0]['surname'];?> <?php echo $personal[0]['name'];?></td>
@@ -955,7 +860,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                     <td><?php echo $eduDetails[0]['program'];?></td>
                                                     <td><?php echo $eduDetails[0]['intake'];?></td>
                                                     <td><?php echo $value['plan_span'];?></td>
-                                                    <td><?php echo date("Y-m-d",  strtotime("today" .'+5 days'))?></td>
+                                                   
                                                 </tr>
                                             <?php
                                             #end foreach
@@ -963,9 +868,10 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                             ?>
                                             </tbody>
                                         </table>
+                                        <button id="sendMsg" type="button" data-color="blue"  class="btn btn-blue waves-effect m-r-20" data-toggle="modal" data-target="#largeModal">SEND MESSAGES</button>
                                     </div>
 
-                                    <div id="fivedaysago" class="table-responsive d-none">
+                                    <div id="overdue" class="table-responsive d-none">
                                         <table  class="table table-bordered table-striped table-hover dataTable js-exportable">
                                             <thead>
                                                 <tr>
@@ -973,7 +879,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                     <th>Full Name</th>
                                                     <th>Programme</th>
                                                     <th>Intake</th>
-                                                    <th>Resident</th>
+                                                    
                                                     <th>Span</th>
                                                     
                                                 </tr>
@@ -984,7 +890,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                     <th>Full Name</th>
                                                     <th>Programme</th>
                                                     <th>Intake</th>
-                                                    <th>Resident</th>
+                                                    
                                                     <th>Span</th>
                                                     
                                                 </tr>
@@ -1009,7 +915,7 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                                     <td><?php echo $eduDetails[0]['program'];?></td>
                                                     <td><?php echo $eduDetails[0]['intake'];?></td>
                                                     <td><?php echo $value['plan_span'];?></td>
-                                                    <td><?php echo date("Y-m-d",  strtotime("today" .'+5 days'))?></td>
+                                                   
                                                 </tr>
                                             <?php
                                             #end foreach
@@ -1017,14 +923,232 @@ $numOfFiveDaysago = count($dueinfivedaysago);
                                             ?>
                                             </tbody>
                                         </table>
+                                        <button id="sendMsg3" type="button" data-color="blue"  class="btn btn-blue waves-effect m-r-20" data-toggle="modal" data-target="#largeModal3">SEND MESSAGES</button>
                                     </div>
                                 </div>
+                        </div>
+                        <div id="graph" class="card">
+                            <div class="header">
+                                <h4>Payment Plan Analysis Chart</h4>
+                            </div>
+                            <div class="body">
+                                <canvas id="bar_chart" height="150"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal fade" id="largeModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                       <center> <div class="modal-header">
+                        
+                       <a class=" navbar-brand center"  href="#"><img src="../images/download.png"  height="44px" style="margin-top:-20px"></a>
+                        <h4 class="modal-title" id="defaultModalLabel">MUTARE TEACHERS COLLEGE</h4>
+                       
+                        </div>
+                        </center>
+                        <div class="modal-body">
+                        <div class="body table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>REG NUMBER</th>
+                                        <th>FULL NAME</th>
+                                        <th>MOBILE NUMBER</th>
+                                        <th>SENDING STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <?php
+                                   
+                                foreach ( $dueinfivedays as $value)
+                                            {
+                                                $reg = $value['reg_number'];
+                                                $personal = $dbHelper->getDetails('personal','reg_number', $reg);
+                                              
+                                             
+                                                ?>
+
+                                                <tr>
+                                                            
+                                                    <td><?php echo $reg;?></td>
+                                                    <td><?php echo $personal[0]['surname'];?> <?php echo $personal[0]['name'];?></td>
+                                                    <td><?php echo $personal[0]['phone'];?> </td>
+                                                    <td>
+                                                   
+                                                    <div class="progress">
+                                                    <div  id="_<?php echo $reg; ?>" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                        aria-valuemax="100" style="width: 100%">
+                                                        <span class="sr-only">40% Complete (success)</span>
+                                                    </div>
+                                                </div> 
+                                                    
+                                                    </td>
+                                                        </tr>
+                                                
+                                            <?php
+                                            #end foreach
+                                            }
+                                            ?>
+                                    
+                                    
+                                </tbody>
+                            </table>
+                           
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                          
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hide to Background</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+             <div class="modal fade" id="largeModal2" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                       <center> <div class="modal-header">
+                        
+                       <a class=" navbar-brand center"  href="#"><img src="../images/download.png"  height="44px" style="margin-top:-20px"></a>
+                        <h4 class="modal-title" id="defaultModalLabel">MUTARE TEACHERS COLLEGE</h4>
+                       
+                        </div>
+                        </center>
+                        <div class="modal-body">
+                        <div class="body table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>REG NUMBER</th>
+                                        <th>FULL NAME</th>
+                                        <th>MOBILE NUMBER</th>
+                                        <th>SENDING STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <?php
+                                   
+                                foreach ( $defaulters as $value)
+                                            {
+                                                $reg = $value['reg_number'];
+                                                $personal = $dbHelper->getDetails('personal','reg_number', $reg);
+                                              
+                                             
+                                                ?>
+
+                                                <tr class='def-row'>
+                                                            
+                                                    <td><?php echo $reg;?></td>
+                                                    <td><?php echo $personal[0]['surname'];?> <?php echo $personal[0]['name'];?></td>
+                                                    <td><?php echo $personal[0]['phone'];?> </td>
+                                                    <td>
+                                                   
+                                                    <div class="progress">
+                                                    <div  id="_<?php echo $reg; ?>" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                        aria-valuemax="100" style="width: 100%">
+                                                        <span class="sr-only">40% Complete (success)</span>
+                                                    </div>
+                                                </div> 
+                                                    
+                                                    </td>
+                                                        </tr>
+                                                
+                                            <?php
+                                            #end foreach
+                                            }
+                                            ?>
+                                    
+                                    
+                                </tbody>
+                            </table>
+                           
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+              
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hide to Background</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+             <div class="modal fade" id="largeModal3" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                       <center> <div class="modal-header">
+                        
+                       <a class=" navbar-brand center"  href="#"><img src="../images/download.png"  height="44px" style="margin-top:-20px"></a>
+                        <h4 class="modal-title" id="defaultModalLabel">MUTARE TEACHERS COLLEGE</h4>
+                       
+                        </div>
+                        </center>
+                        <div class="modal-body">
+                        <div class="body table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>REG NUMBER</th>
+                                        <th>FULL NAME</th>
+                                        <th>MOBILE NUMBER</th>
+                                        <th>SENDING STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <?php
+                                   
+                                foreach ( $dueinfivedaysago as $value)
+                                            {
+                                                $reg = $value['reg_number'];
+                                                $personal = $dbHelper->getDetails('personal','reg_number', $reg);
+                                              
+                                             
+                                                ?>
+
+                                                <tr class='def-row'>
+                                                            
+                                                    <td><?php echo $reg;?></td>
+                                                    <td><?php echo $personal[0]['surname'];?> <?php echo $personal[0]['name'];?></td>
+                                                    <td><?php echo $personal[0]['phone'];?> </td>
+                                                    <td>
+                                                   
+                                                    <div class="progress">
+                                                    <div  id="_<?php echo $reg; ?>" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                        aria-valuemax="100" style="width: 100%">
+                                                        <span class="sr-only">40% Complete (success)</span>
+                                                    </div>
+                                                </div> 
+                                                    
+                                                    </td>
+                                                        </tr>
+                                                
+                                            <?php
+                                            #end foreach
+                                            }
+                                            ?>
+                                    
+                                    
+                                </tbody>
+                            </table>
+                           
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+              
+                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">Hide to Background</button>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- #END# Exportable Table -->
         </div>
+        
     </section>
 
     <!-- Jquery Core Js -->
@@ -1057,10 +1181,99 @@ $numOfFiveDaysago = count($dueinfivedaysago);
     <script src="../js/admin.js"></script>
     <script src="../js/pages/tables/jquery-datatable.js"></script>
     <script src="../js/pages/ui/animations.js"></script>
+    <script src="../js/pages/ui/tooltips-popovers.js"></script>
 
+    <!-- Chart Plugins Js -->
+    <script src="../plugins/chartjs/Chart.bundle.js"></script>
+
+    
+    <script src="../js/pages/charts/chartjs.js"></script>
     <!-- Demo Js -->
     <script src="../js/demo.js"></script>
     <script src="assets/js/applicants.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            // Add smooth scrolling to all links
+            $("a").on('click', function(event) {
+                // Make sure this.hash has a value before overriding default behavior
+                if (this.hash !== "") {
+                // Prevent default anchor click behavior
+                event.preventDefault();
+
+                // Store hash
+                var hash = this.hash;
+                var num = (hash === '#graph')?  $('#top').height()+100 : 14;
+
+                $('html, body').animate({
+                    scrollTop:num
+                }, 800, function(){
+                });
+                } // End if
+            });
+       
+            $("#sendMsg").on('click', (event)=>{
+                var dueinfive = <?php echo json_encode($dueinfivedays); ?>;
+                console.log(dueinfive);
+                var dueVals = Object.values(dueinfive);
+                dueVals.forEach(val => {
+                    let rant = Math.random();
+                    var reg  = val.reg_number;
+                    var type = "active";
+                    setTimeout(() => {
+                        $.post("../php/action/send_text2.php", {reg, type});
+                        let elem = $(`#_${reg}`);
+                        $(elem).removeClass('active progress-bar-striped');
+                    }, rant *10* 1000);
+                });
+
+                
+            })
+       
+
+         $("#sendMsg2").on('click', (event)=>{
+                var defaulty = <?php echo json_encode($defaulters); ?>;
+                console.log(defaulty);
+                var defVals = Object.values(defaulty);
+                defVals.forEach(val => {
+                    let rant = Math.random();
+                    var reg  = val.reg_number;
+                    var type = "default";
+                    setTimeout(() => {
+                        $.post("../php/action/send_text2.php", {reg, type});
+                        let elem = $(`#_${reg}`);
+                        $(elem).removeClass('active progress-bar-striped');
+                    }, rant *10* 1000);
+                });
+
+                
+            })
+            
+
+             $("#sendMsg3").on('click', (event)=>{
+                var fivedays = <?php echo json_encode($dueinfivedaysago); ?>;
+                console.log(fivedays);
+                var overduefVals = Object.values(fivedays);
+                overduefVals.forEach(val => {
+                    let rant = Math.random();
+                    var reg  = val.reg_number;
+                    var type = "default";
+                    setTimeout(() => {
+                        $.post("../php/action/send_text2.php", {reg, type});
+                        let elem = $(`#_${reg}`);
+                        $(elem).removeClass('active progress-bar-striped');
+                    }, rant *10* 1000);
+                });
+
+             }) 
+
+            });
+            
+       
+
+
+       
+    </script>
 </body>
 
 </html>

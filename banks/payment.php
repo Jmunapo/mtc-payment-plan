@@ -230,12 +230,13 @@ font awesome
                
                 $payments= $db->getDetails('payments','reg_number',$reg_number);
                 $appDate= $db->getDetails('applicants','reg_number',$reg_number);
+                $appliDate = $appDate[0]['date'];
                 //print_r($payments);
                 function filter_function($payment){
                     global $date;
-
+                    global $appliDate;
                   
-                     $appliDate = $appDate[0]['date'];
+                    
                      
                      return $appliDate <= $payment['date'] && $payment['date'] <= $date;
                  }
@@ -251,12 +252,39 @@ font awesome
 
                
                 $total= $db->getDetails('applicants','reg_number',$reg_number);
+                $phonedetails= $db->getDetails('personal','reg_number',$reg_number);
+                $phone=$phonedetails[0]['phone'];
              
                 $planTotal=$total[0]['total'];
                 if($pay>=$planTotal){
                    
                 
                     $db->updateData('applicants','status', 'settled', 'reg_number', $reg_number);
+                      // suppress error message
+                        error_reporting(0);
+
+                        // BulkSMS Webservice username for sending SMS.
+                        //Get it from User Configuration. Its case sensitive.
+
+                        $username = 'youngkunjez';
+
+                        // Webservices token for above Webservice username
+                        $token = '24ec935f60593ca19330eb597309511d';
+
+                        // BulkSMS Webservices URL
+                        $bulksms_ws = 'http://portal.bulksmsweb.com/index.php?app=ws';
+
+                        // destination numbers, comma seperated or use #groupcode for sending to group
+                        // $destinations = '#devteam,263071077072,26370229338';
+                        // $destinations = '26300123123123,26300456456456';  for multiple recipients
+                        //$destinations = $phone;
+                          $message="Thank you for settling your plan";
+                        // send via BulkSMS HTTP API
+
+                        $ws_str = $bulksms_ws . '&u=' . $username . '&h=' . $token . '&op=pv';
+                        $ws_str .= '&to=0' . urlencode($phone) . '&msg='.urlencode($message);
+                        $ws_response = @file_get_contents($ws_str);
+
                     
                     
                 }
@@ -265,7 +293,30 @@ font awesome
                    
                     $status= ($pay/$planTotal)*100;
                     $db->updateData('applicants','status', $status, 'reg_number', $reg_number);
-                    echo $status;
+                    error_reporting(0);
+
+                    // BulkSMS Webservice username for sending SMS.
+                    //Get it from User Configuration. Its case sensitive.
+
+                    $username = 'youngkunjez';
+
+                    // Webservices token for above Webservice username
+                    $token = '24ec935f60593ca19330eb597309511d';
+
+                    // BulkSMS Webservices URL
+                    $bulksms_ws = 'http://portal.bulksmsweb.com/index.php?app=ws';
+
+                    // destination numbers, comma seperated or use #groupcode for sending to group
+                    // $destinations = '#devteam,263071077072,26370229338';
+                    // $destinations = '26300123123123,26300456456456';  for multiple recipients
+                    //$destinations = $phone;
+                      $message="Thank you for complying to your plan installments,you are $status % to compelete";
+                    // send via BulkSMS HTTP API
+
+                    $ws_str = $bulksms_ws . '&u=' . $username . '&h=' . $token . '&op=pv';
+                    $ws_str .= '&to=0' . urlencode($phone) . '&msg='.urlencode($message);
+                    $ws_response = @file_get_contents($ws_str);
+                    
                 }
 
                 ?>

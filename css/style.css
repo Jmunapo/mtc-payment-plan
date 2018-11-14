@@ -7477,9 +7477,9 @@ fieldset[disabled] .form-control {
   -o-transition: all 0.5s;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', Arial, Tahoma, sans-serif;
   background: #fdfdfd;
-  width: 270px;
+  width: 288px;
   overflow: hidden;
   display: inline-block;
   height: calc(100vh - 70px);
@@ -7490,7 +7490,9 @@ fieldset[disabled] .form-control {
   -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   -ms-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 11 !important; }
+  z-index: 11 !important;
+font-weight:bold; }
+  
   
   .sidebar .legal {
     position: absolute;

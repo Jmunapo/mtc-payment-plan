@@ -2,13 +2,13 @@
         $(function () {
             $('.readTnC').on('click', function () {
                 var color = $(this).data('color');
-                $('#mdModal .modal-content').removeAttr('class').addClass('modal-content modal-col-' + color);
-                $('#mdModal').modal('show');
+                $('#largeModal .modal-content').removeAttr('class').addClass('modal-content modal-col-' + color);
+                $('#largeModal').modal('show');
             });
 
             $('#accept').on('click', function () {
                 $('#accept_terms').attr('checked', true);
-                $('#mdModal').modal('hide');
+                $('#largeModal').modal('hide');
             });
 
             $('#form_validation').submit(e=>{

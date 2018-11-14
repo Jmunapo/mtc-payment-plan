@@ -14,7 +14,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>Home</title>
     <!-- Favicon-->
-   
+    <link rel="icon" href="../download.png" type="image/x-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -54,164 +54,18 @@
     <?php
         include('ui/search_bar.php');
     ?>
+    <?php
+        include('lib/includes/sidenav.php');
+     ?>
+
+      <?php
+        include('lib/includes/topnav.php');
+     ?>
     <!-- #END# Search Bar -->
     <!-- Top Bar -->
-    <nav class="navbar ">
-        <div class="container-fluid top">
-            <div class="navbar-header">
-                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
-                <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand fa fa-bars " href="index.php"> MTC ADMIN PANEL</a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Call Search -->
-                    <li><a href="javascript:void(0);" class="js-search" data-close="true"><i class="material-icons">search</i></a></li>
-                    <!-- #END# Call Search -->
-                    <!-- Notifications -->
-                 
-                    <!-- #END# Notifications -->
-                    <!-- Tasks -->
-                    
-                    <li class="dropdown" style="margin-right:">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                            <i class="fa fa-user-o fa-2x"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">MY ACCOUNT</li>
-                            <li class="body">
-
-                            <li><a href="javascript:void(0);"><i class="fa fa-user-o fa-fw"></i>Profile</li></a>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="fa fa-envelope fa-fw"></i>Mail</li></a>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="javascript:void(0);" class="signout-btn"><i class="fa fa-sign-out fa-fw"></i>Sign Out</li></a>
-                            
-              
-                        </ul>
-                    </li>
-                    <!-- #END# Tasks -->
-                    <li class="pull-right"><a href="javascript:void(0);" data-close="true"><i class="fa fa-diamond fa-2x" style="color:gold"></i></a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    
     <!-- #Top Bar -->
-    <section>
-        <!-- Left Sidebar -->
-        <aside id="leftsidebar" class="sidebar">
-            <!-- User Info -->
-            <div class="user-info">
-                <div class="image">
-                <img src="../uploads/<?php echo $data[0]['image']; ?> " width="45" height="55" alt="User" />
-                </div>
-                <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $data[0]['full_name'] ;?></div>
-                    <div class="email"><?php echo $data[0]['post'] ;?></div>
-                  
-                </div>
-            </div>
-            <!-- #User Info -->
-            <!-- Menu -->
-            <div class="menu">
-                <ul class="list">
-                    <li class="header" style="background-color:#1269ad;color:white">MAIN NAVIGATION</li>
-                    <li class="active">
-                        <a href="index.php">
-                            <i class="fa fa-home">
-                            <span>Home</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="all.php">
-                            <i class="fa fa-database">
-                            <span>All Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="plan-applicants.php">
-                            <i class="fa fa-folder-open">
-                            <span>Payment Plans</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="registered.php">
-                            <i class="fa fa-cubes">
-                            <span>Registered Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="un-registered.php">
-                            <i class="fa fa-close">
-                            <span>Un-Registered Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="deffered.php">
-                            <i class="fa fa-exclamation-triangle">
-                            <span>Deffered Students</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="index.php">
-                            <i class="fa fa-envelope" style="color:#1269ad">
-                            <span  style="color:#1269ad">MTC Mail</span>
-                        </a></i>
-                        
-                    </li>
-                    <hr>
-                    <li class="#">
-                        <a href="my-profile.php">
-                            <i class="fa fa-graduation-cap">
-                            <span>My Profile</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="app.php">
-                            <i class="fa fa-whatsapp text-success">
-                            <span>whatsapp</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="tweeter.php">
-                            <i class=" fa fa-twitter text-primary">
-                            <span>Tweeter</span>
-                        </a></i>
-                        
-                    </li>
-                    <li class="#">
-                        <a href="signout.php">
-                            <i class=" fa fa-sign-out text-danger">
-                            <span>Sign Out</span>
-                        </a></i>
-                        
-                    </li>
-                  
-                   
-                </ul>
-            </div>
-            <!-- #Menu -->
-            <!-- Footer -->
-            <div class="legal"style="background:#1269ad;color:white;font-family:New-Times-Roman" >
-                <div class="copyright"  >
-                   MTC &copy;2018  youngkunjez & joemags .
-                </div>
-            </div>
-            <!-- #Footer -->
-        </aside>
-        <!-- #END# Left Sidebar -->
-        <!-- Right Sidebar -->
-      
-        <!-- #END# Right Sidebar -->
-    </section>
+   
     <section class="content">
         <br>
         <div class="container-fluid">
@@ -221,12 +75,12 @@
                 
             </div>
         <br>
-         
+
         
             <!-- Widgets -->
             <div class="row clearfix">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 pan" >
-                    <div class="info-box bg-white hover-expand-effect">
+                    <div class="info-box bg-white hover-expand-effect" onclick="window.location='http://www.mutareteachers.ac.zw/'">
                         <div class="icon">
                             <i class="fa fa-database" style="color:#1269ad"></i>
                         </div>
@@ -237,7 +91,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box bg-white hover-expand-effect">
+                    <div class="info-box bg-white hover-expand-effect"  onclick="window.location='http://www.mutareteachers.ac.zw/'">
                         <div class="icon">
                         <i class="fa fa-cubes" style="color:#1269ad"></i>
                         </div>
@@ -248,7 +102,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box bg-white hover-expand-effect">
+                    <div class="info-box bg-white hover-expand-effect" onclick="window.location='http://www.mutareteachers.ac.zw/'">
                         <div class="icon">
                         <i class="fa fa-exclamation-triangle" style="color:#1269ad"></i>
                         </div>
@@ -259,7 +113,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                    <div class="info-box bg-white hover-expand-effect"onclick="window.location='plan-applicants.php';">
+                    <div class="info-box bg-white hover-expand-effect" onclick="window.location='plan-applicants.php';">
                         <div class="icon">
                         <i class="fa fa-folder-open" style="color:#1269ad"></i>
                         </div>
@@ -352,7 +206,7 @@
           
 
 
-                <div class="row">
+                <div class="row" id="top">
               <div class="col-md-8 grid-margin stretch-card bg1"  >
                 <div class="card "style="padding-top:8px">
                     <label for="validationCustom04">&nbsp;&nbsp;&nbsp;<i class="fa fa-diamond fa-2x ">&nbsp;&nbsp;&nbsp;USER PROFILE</i>

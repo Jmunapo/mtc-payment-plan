@@ -1,4 +1,10 @@
-.plan-row>td, .def-row>td{
+.plan-row>td, .def-row>td, .active-row>td{
+    cursor: pointer;
+}
+.active-row>td{
+    cursor: pointer;
+}
+.plan-rows>td{
     cursor: pointer;
 }
 
@@ -11,7 +17,7 @@
 .top
 {
     background:#1269ad;
-    padding-left:21%;
+  
 }
 
 .changcolor{
@@ -45,4 +51,25 @@
 .linkcolor{
     color:white;
 }
+
+.header{
+    background:#9e9e9ef5 !important;
+    color:#fff !important;
+    text-transform:uppercase;
+}
+#applicants-title{
+    color:#fff !important;
+    }
+    .sidetext{
+   
+    
+        font-family: "Roboto",serif;
+        line-height:12px;
+        color:#999 !important;
+        font-weight: bold;
+        font-size: 14px;
+        overflow: hidden;
+        
+    }
+
 
